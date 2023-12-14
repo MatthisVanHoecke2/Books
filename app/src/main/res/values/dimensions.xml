@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="icon_medium">30dp</dimen>
+    <dimen name="icon_large">40dp</dimen>
+    <dimen name="icon_xlarge">60dp</dimen>
+    <dimen name="padding_xxsmall">3dp</dimen>
+    <dimen name="padding_xsmall">5dp</dimen>
+    <dimen name="padding_small">8dp</dimen>
+    <dimen name="padding_medium">10dp</dimen>
+    <dimen name="padding_large">15dp</dimen>
+    <dimen name="padding_xlarge">30dp</dimen>
+    <dimen name="padding_xxlarge">40dp</dimen>
+    <dimen name="padding_giant">80dp</dimen>
+    <dimen name="padding_modal_left">24.dp</dimen>
+    <dimen name="padding_modal_top">10.dp</dimen>
+    <dimen name="padding_modal_right">24.dp</dimen>
+    <dimen name="padding_modal_bottom">35.dp</dimen>
+    <dimen name="image_width">330.dp</dimen>
+    <dimen name="image_width_in_box">180.dp</dimen>
+    <dimen name="table_footer_height">25.dp</dimen>
+    <dimen name="corner_zero">0.dp</dimen>
+    <dimen name="corner_five">5.dp</dimen>
+</resources>
