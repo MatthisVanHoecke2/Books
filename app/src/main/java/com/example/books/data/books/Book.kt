@@ -6,12 +6,13 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Book(
     @SerialName(value = "cover_i")
-    val coverId: Long,
+    val coverId: Long? = null,
     @SerialName(value = "edition_count")
-    val edition: Long,
+    val edition: Long? = null,
     val title: String,
     @SerialName(value = "author_name")
-    val author: String,
+    val author: List<String?> = emptyList(),
+    val contributor: List<String?> = emptyList(),
     @SerialName(value = "first_publish_year")
-    val publishYear: Int,
+    val publishYear: Int? = null,
 )

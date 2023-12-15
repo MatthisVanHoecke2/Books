@@ -7,7 +7,7 @@ import retrofit2.Retrofit
 
 fun createRetrofit(url: String): Retrofit {
     return Retrofit.Builder()
-        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+        .addConverterFactory(Json { ignoreUnknownKeys = true }.asConverterFactory("application/json".toMediaType()))
         .baseUrl(url)
         .build()
 }

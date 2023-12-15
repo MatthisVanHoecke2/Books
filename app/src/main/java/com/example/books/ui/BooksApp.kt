@@ -1,7 +1,6 @@
 package com.example.books.ui
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
@@ -14,10 +13,17 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Outline
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -45,9 +51,8 @@ fun BooksApp(navController: NavHostController = rememberNavController()) {
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet(
-                drawerShape = MaterialTheme.shapes.extraSmall,
+                drawerShape = NavShape(0.dp, 0.7f),
                 drawerContainerColor = MaterialTheme.colorScheme.onPrimary,
-                modifier = Modifier.fillMaxWidth(0.7f),
             ) {
                 DrawerContent(onClick = {
                     navController.navigate(it)
@@ -89,5 +94,27 @@ fun BooksApp(navController: NavHostController = rememberNavController()) {
                 ),
             )
         }
+    }
+}
+
+class NavShape(
+    private val widthOffset: Dp,
+    private val scale: Float,
+) : Shape {
+
+    override fun createOutline(
+        size: Size,
+        layoutDirection: LayoutDirection,
+        density: Density,
+    ): Outline {
+        return Outline.Rectangle(
+            Rect(
+                Offset.Zero,
+                Offset(
+                    size.width * scale + with(density) { widthOffset.toPx() },
+                    size.height,
+                ),
+            ),
+        )
     }
 }
