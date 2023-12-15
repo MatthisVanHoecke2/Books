@@ -13,7 +13,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -21,10 +20,14 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import com.example.books.R
+import com.example.books.ui.shared.CustomTextField
 
 @Composable
 fun HomeScreen() {
@@ -38,16 +41,26 @@ fun SearchBook() {
     val searchResult by viewModel.searchResult.collectAsState()
     val loading by viewModel.loading.collectAsState()
     var currentPage by remember { mutableIntStateOf(0) }
-    val imagesLoad by remember { mutableStateOf(mutableMapOf<Long, Boolean>()) }
+    var imagesLoad by remember { mutableStateOf(emptyMap<Long, Boolean>()) }
+
+    fun search() {
+        val newMap = imagesLoad.toMutableMap()
+        newMap.clear()
+        imagesLoad = newMap
+        viewModel.searchApi()
+    }
 
     Column {
         LazyVerticalGrid(
             columns = GridCells.Adaptive(minSize = 128.dp),
         ) {
             item(span = { GridItemSpan(3) }) {
-                Row {
-                    TextField(value = search.value, onValueChange = { viewModel.onSearch(it) })
-                    Button(enabled = !loading, onClick = { viewModel.searchApi() }) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium)),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    CustomTextField(value = search.value, onValueChange = { viewModel.onSearch(it) }, onDone = { search() }, onClear = { viewModel.onSearch("") })
+                    Button(enabled = !loading, onClick = { search() }) {
                         Text(text = "Search")
                     }
                 }
@@ -60,8 +73,8 @@ fun SearchBook() {
 
                     AsyncImage(
                         model = imageUrl,
-                        onLoading = { imagesLoad[book.coverId] = true },
-                        onSuccess = { imagesLoad[book.coverId] = false },
+                        onLoading = { imagesLoad = imagesLoad.toMutableMap().apply { put(book.coverId, true) } },
+                        onSuccess = { imagesLoad = imagesLoad.toMutableMap().apply { put(book.coverId, false) } },
                         contentDescription = book.title,
                         modifier = Modifier.clickable {
                         },
@@ -69,14 +82,17 @@ fun SearchBook() {
                 }
             }
             item(span = { GridItemSpan(3) }) {
-                Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.padding(10.dp)) {
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium)),
+                ) {
                     if (searchResult.isNotEmpty() && (loading || imagesLoad.containsValue(true))) {
                         CircularProgressIndicator(
                             color = MaterialTheme.colorScheme.secondary,
                             trackColor = MaterialTheme.colorScheme.surfaceVariant,
                         )
                     } else if (searchResult.isNotEmpty()) {
-                        Button(enabled = !loading, onClick = {
+                        Button(onClick = {
                             currentPage += 1
                             viewModel.expandSearch(offset = (currentPage * 25L))
                         }) {
