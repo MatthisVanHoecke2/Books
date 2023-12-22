@@ -1,8 +1,5 @@
 package com.example.books.data.books
 
-import androidx.room.Entity
-import androidx.room.Ignore
-import androidx.room.PrimaryKey
 import com.example.books.data.authors.AuthorLine
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -16,12 +13,10 @@ data class BookIndex(
 )
 
 @Serializable
-@Entity
 data class BookDetail(
     @SerialName(value = "key")
-    @PrimaryKey
-    val bookKey: String,
-    @Ignore val covers: List<Long> = emptyList(),
+    val key: String,
+    val covers: List<Long> = emptyList(),
     val title: String,
     @SerialName(value = "authors")
     val authors: List<AuthorLine> = emptyList(),

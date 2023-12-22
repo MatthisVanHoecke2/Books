@@ -1,8 +1,8 @@
 package com.example.books.network
 
 import com.example.books.data.books.BookDetail
-import com.example.books.data.books.BookRatings
 import com.example.books.data.books.BookResult
+import com.example.books.data.books.Rating
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -34,10 +34,10 @@ interface BooksApiService {
     /**
      * Retrieves a books ratings from the API
      * @param key the key value to retrieve the book details from the API
-     * @return [BookRatings] containing the ratings of a specific book
+     * @return [Rating] containing the ratings of a specific book
      * */
     @GET("/works/{key}/ratings.json")
-    suspend fun getRatings(@Path("key") key: String): BookRatings
+    suspend fun getRatings(@Path("key") key: String): Rating
 }
 
 /**

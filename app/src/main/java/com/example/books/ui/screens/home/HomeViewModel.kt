@@ -24,14 +24,14 @@ class HomeViewModel : CustomViewModel() {
     }
 
     /**
-     * Queries the API for books based on the search value, then filters them based on whether they have covers or not,
+     * Queries the API for books based on the search value,
      * and loads the filtered list into the [homeUiState]
      * */
     fun searchApi() {
         onLoadChange(true)
         viewModelScope.launch {
             val result = BooksApi.retrofitService.getBooks(homeUiState.value.search)
-            _homeUiState.update { it.copy(searchResult = result.docs.filter { book -> book.coverId != null }) }
+            _homeUiState.update { it.copy(searchResult = result.docs) }
             onLoadChange(false)
         }
     }
@@ -47,7 +47,7 @@ class HomeViewModel : CustomViewModel() {
             val result = BooksApi.retrofitService.getBooks(homeUiState.value.search, offset = offset, limit = limit)
             val list = homeUiState.value.searchResult.toMutableList()
             list.addAll(result.docs)
-            _homeUiState.update { it.copy(searchResult = list.filter { book -> book.coverId != null }) }
+            _homeUiState.update { it.copy(searchResult = list) }
             onLoadChange(false)
         }
     }

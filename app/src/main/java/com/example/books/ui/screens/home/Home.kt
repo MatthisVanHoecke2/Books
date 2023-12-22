@@ -66,20 +66,22 @@ fun SearchBook(onNavigate: (String) -> Unit) {
             items(
                 searchResult,
             ) { book ->
-                if (book.coverId != null) {
-                    val imageUrl = "https://covers.openlibrary.org/b/id/${book.coverId}-L.jpg"
+                Row(
+                    modifier = Modifier.clickable {
+                        val key = book.key.replace("/works/", "")
+                        onNavigate.invoke(key)
+                    },
+                    horizontalArrangement = Arrangement.Center,
+                ) {
+                    if (book.coverId != null) {
+                        val imageUrl = "https://covers.openlibrary.org/b/id/${book.coverId}-L.jpg"
 
-                    Row(
-                        modifier = Modifier.clickable {
-                            val key = book.key.replace("/works/", "")
-                            onNavigate.invoke(key)
-                        },
-                        horizontalArrangement = Arrangement.Center,
-                    ) {
                         AsyncImage(
                             model = imageUrl,
                             contentDescription = book.title,
                         )
+                    } else {
+                        Text(book.title)
                     }
                 }
             }

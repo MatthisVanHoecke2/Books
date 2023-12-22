@@ -54,6 +54,8 @@ android {
 dependencies {
     val roomVersion = "2.6.1"
 
+    implementation("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.8.0")
+    implementation("androidx.room:room-ktx:$roomVersion")
     implementation("androidx.room:room-runtime:$roomVersion")
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
     ksp("androidx.room:room-compiler:2.6.1")
