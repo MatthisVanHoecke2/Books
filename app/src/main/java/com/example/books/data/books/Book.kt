@@ -3,6 +3,7 @@ package com.example.books.data.books
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import com.example.books.data.authors.AuthorLine
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

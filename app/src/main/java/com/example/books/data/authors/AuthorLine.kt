@@ -1,4 +1,4 @@
-package com.example.books.data.books
+package com.example.books.data.authors
 
 import androidx.room.Entity
 import androidx.room.Ignore
