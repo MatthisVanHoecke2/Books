@@ -30,15 +30,16 @@ import com.example.books.R
 import com.example.books.ui.shared.CustomTextField
 
 @Composable
-fun HomeScreen() {
-    SearchBook()
+fun HomeScreen(onNavigate: (String) -> Unit) {
+    SearchBook(onNavigate)
 }
 
 @Composable
-fun SearchBook() {
+fun SearchBook(onNavigate: (String) -> Unit) {
     val viewModel = viewModel<HomeViewModel>()
-    val search = viewModel.search.collectAsState()
-    val searchResult by viewModel.searchResult.collectAsState()
+    val homeUiState = viewModel.homeUiState.collectAsState()
+    val search = homeUiState.value.search
+    val searchResult = homeUiState.value.searchResult
     val loading by viewModel.loading.collectAsState()
     var currentPage by remember { mutableIntStateOf(0) }
     var imagesLoad by remember { mutableStateOf(emptyMap<Long, Boolean>()) }
@@ -59,7 +60,7 @@ fun SearchBook() {
                     horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium)),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    CustomTextField(value = search.value, onValueChange = { viewModel.onSearch(it) }, onDone = { search() }, onClear = { viewModel.onSearch("") })
+                    CustomTextField(value = search, onValueChange = { viewModel.onSearch(it) }, onDone = { search() }, onClear = { viewModel.onSearch("") })
                     Button(enabled = !loading, onClick = { search() }) {
                         Text(text = "Search")
                     }
@@ -77,6 +78,8 @@ fun SearchBook() {
                         onSuccess = { imagesLoad = imagesLoad.toMutableMap().apply { put(book.coverId, false) } },
                         contentDescription = book.title,
                         modifier = Modifier.clickable {
+                            val key = book.key.replace("/works/", "")
+                            onNavigate.invoke(key)
                         },
                     )
                 }

@@ -2,17 +2,35 @@ package com.example.books.data.books
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonElement
 
 @Serializable
-data class Book(
+data class BookIndex(
+    val key: String,
+    val title: String,
     @SerialName(value = "cover_i")
     val coverId: Long? = null,
-    @SerialName(value = "edition_count")
-    val edition: Long? = null,
+)
+
+@Serializable
+data class BookDetail(
+    val key: String,
+    val covers: List<Long> = emptyList(),
     val title: String,
-    @SerialName(value = "author_name")
-    val author: List<String?> = emptyList(),
-    val contributor: List<String?> = emptyList(),
+    val description: JsonElement? = null,
+    @SerialName(value = "authors")
+    val authors: List<Author> = emptyList(),
     @SerialName(value = "first_publish_year")
     val publishYear: Int? = null,
+)
+
+@Serializable
+data class Author(
+    val author: AuthorItem,
+    val type: AuthorItem,
+)
+
+@Serializable
+data class AuthorItem(
+    val key: String,
 )

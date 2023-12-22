@@ -2,4 +2,6 @@
     <string name="app_name">My Application</string>
     <string name="home_route">home</string>
     <string name="home_name">Home</string>
+    <string name="bookdetails_route">home/{key}</string>
+    <string name="bookdetails_name">Book Details</string>
 </resources>
