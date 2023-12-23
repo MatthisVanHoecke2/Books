@@ -1,4 +1,4 @@
-package com.example.books.data.authors
+package com.example.books.network.data.authors
 
 import kotlinx.serialization.Serializable
 

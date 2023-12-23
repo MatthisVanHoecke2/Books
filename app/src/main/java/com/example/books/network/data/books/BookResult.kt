@@ -1,4 +1,4 @@
-package com.example.books.data.books
+package com.example.books.network.data.books
 
 import kotlinx.serialization.Serializable
 

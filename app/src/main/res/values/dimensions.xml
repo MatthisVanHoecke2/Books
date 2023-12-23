@@ -20,4 +20,6 @@
     <dimen name="table_footer_height">25.dp</dimen>
     <dimen name="corner_zero">0.dp</dimen>
     <dimen name="corner_five">5.dp</dimen>
+    <dimen name="cover_width">200.dp</dimen>
+    <dimen name="cover_height">300.dp</dimen>
 </resources>

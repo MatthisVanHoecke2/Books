@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -21,11 +22,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import com.example.books.R
+import com.example.books.network.data.books.BookIndex
 import com.example.books.ui.shared.CustomTextField
 
 @Composable
@@ -35,7 +38,7 @@ fun HomeScreen(onNavigate: (String) -> Unit) {
 
 @Composable
 fun SearchBook(onNavigate: (String) -> Unit) {
-    val viewModel = viewModel<HomeViewModel>()
+    val viewModel = viewModel<HomeViewModel>(factory = HomeViewModel.Factory)
     val homeUiState by viewModel.homeUiState.collectAsState()
     val search = homeUiState.search
     val searchResult = homeUiState.searchResult
@@ -68,18 +71,25 @@ fun SearchBook(onNavigate: (String) -> Unit) {
             ) { book ->
                 Row(
                     modifier = Modifier.clickable {
-                        val key = book.key.replace("/works/", "")
+                        val key = book.key
                         onNavigate.invoke(key)
-                    },
+                    }.padding(dimensionResource(R.dimen.padding_small)),
                     horizontalArrangement = Arrangement.Center,
                 ) {
-                    if (book.coverId != null) {
-                        val imageUrl = "https://covers.openlibrary.org/b/id/${book.coverId}-L.jpg"
+                    if (book is BookIndex) {
+                        if (book.coverId != null) {
+                            val imageUrl = "https://covers.openlibrary.org/b/id/${book.coverId}-L.jpg"
 
-                        AsyncImage(
-                            model = imageUrl,
-                            contentDescription = book.title,
-                        )
+                            SubcomposeAsyncImage(
+                                model = imageUrl,
+                                contentDescription = book.title,
+                                loading = { Text(book.title) },
+                                contentScale = ContentScale.FillWidth,
+                                modifier = Modifier.fillMaxSize(),
+                            )
+                        } else {
+                            Text(book.title)
+                        }
                     } else {
                         Text(book.title)
                     }

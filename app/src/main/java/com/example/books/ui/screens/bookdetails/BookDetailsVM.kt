@@ -1,7 +1,11 @@
 package com.example.books.ui.screens.bookdetails
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.books.network.BooksApi
+import androidx.lifecycle.viewmodel.CreationExtras
+import com.example.books.BooksApplication
+import com.example.books.repository.BooksRepository
 import com.example.books.ui.CustomViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,18 +18,27 @@ import kotlinx.coroutines.launch
  *
  * @property key the key value to retrieve the book details from the API
  * */
-class BookDetailsVM(private val key: String) : CustomViewModel() {
+class BookDetailsVM(booksRepository: BooksRepository, private val key: String) : CustomViewModel(booksRepository) {
     private val _bookDetailsUiState = MutableStateFlow(BookDetailsUiState())
     val bookDetailsUiState = _bookDetailsUiState.asStateFlow()
 
     init {
         onLoadChange(true)
-        val retrofit = BooksApi.retrofitService
         viewModelScope.launch {
-            val book = async { retrofit.getBook(key) }
-            val ratings = async { retrofit.getRatings(key) }
+            val book = async { booksRepository.getBook(key) }
+            val ratings = async { booksRepository.getRatings(key) }
             _bookDetailsUiState.update { it.copy(book = book.await(), ratings = ratings.await()) }
             onLoadChange(false)
+        }
+    }
+
+    companion object {
+        class Factory(private val key: String) : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
+                val application = (extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as BooksApplication)
+                val booksRepository = application.container.booksRepository
+                return modelClass.getConstructor(BooksRepository::class.java, String::class.java).newInstance(booksRepository, key)
+            }
         }
     }
 }

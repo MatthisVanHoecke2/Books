@@ -43,7 +43,7 @@ fun BooksApp(navController: NavHostController = rememberNavController()) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val backStackEntry by navController.currentBackStackEntryAsState()
-    val currentPage = AppPage.values().find {
+    val currentPage = AppPage.entries.find {
         backStackEntry?.destination?.route == stringResource(it.route)
     } ?: AppPage.Home
 

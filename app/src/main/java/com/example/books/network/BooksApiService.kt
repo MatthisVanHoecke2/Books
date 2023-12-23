@@ -1,13 +1,11 @@
 package com.example.books.network
 
-import com.example.books.data.books.BookDetail
-import com.example.books.data.books.BookResult
-import com.example.books.data.books.Rating
+import com.example.books.network.data.books.BookDetail
+import com.example.books.network.data.books.BookResult
+import com.example.books.network.data.books.Rating
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
-
-private val retrofit = createRetrofit("https://openlibrary.org")
 
 /**
  * Service for retrieving data from the API
@@ -38,13 +36,4 @@ interface BooksApiService {
      * */
     @GET("/works/{key}/ratings.json")
     suspend fun getRatings(@Path("key") key: String): Rating
-}
-
-/**
- * Object for using the service and accessing the [retrofit] object
- * */
-object BooksApi {
-    val retrofitService: BooksApiService by lazy {
-        retrofit.create(BooksApiService::class.java)
-    }
 }

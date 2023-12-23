@@ -1,7 +1,11 @@
 package com.example.books.ui.screens.home
 
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.books.network.BooksApi
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.books.BooksApplication
+import com.example.books.repository.BooksRepository
 import com.example.books.ui.CustomViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -11,7 +15,7 @@ import kotlinx.coroutines.launch
 /**
  * ViewModel class for Home page
  * */
-class HomeViewModel : CustomViewModel() {
+class HomeViewModel(booksRepository: BooksRepository) : CustomViewModel(booksRepository) {
     private val _homeUiState = MutableStateFlow(HomeUiState())
     val homeUiState = _homeUiState.asStateFlow()
 
@@ -30,8 +34,8 @@ class HomeViewModel : CustomViewModel() {
     fun searchApi() {
         onLoadChange(true)
         viewModelScope.launch {
-            val result = BooksApi.retrofitService.getBooks(homeUiState.value.search)
-            _homeUiState.update { it.copy(searchResult = result.docs) }
+            val result = booksRepository.getBooks(homeUiState.value.search)
+            _homeUiState.update { it.copy(searchResult = result) }
             onLoadChange(false)
         }
     }
@@ -44,11 +48,21 @@ class HomeViewModel : CustomViewModel() {
     fun expandSearch(offset: Long = 0, limit: Long = 25) {
         onLoadChange(true)
         viewModelScope.launch {
-            val result = BooksApi.retrofitService.getBooks(homeUiState.value.search, offset = offset, limit = limit)
+            val result = booksRepository.getBooks(homeUiState.value.search, offset = offset, limit = limit)
             val list = homeUiState.value.searchResult.toMutableList()
-            list.addAll(result.docs)
+            list.addAll(result)
             _homeUiState.update { it.copy(searchResult = list) }
             onLoadChange(false)
+        }
+    }
+
+    companion object {
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as BooksApplication)
+                val booksRepository = application.container.booksRepository
+                HomeViewModel(booksRepository)
+            }
         }
     }
 }

@@ -5,7 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.example.books.data.booklists.BookList
+import com.example.books.persistence.data.booklists.BookList
 
 @Dao
 interface BookListDao {

@@ -1,4 +1,4 @@
-package com.example.books.data.booklists
+package com.example.books.persistence.data.booklists
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
