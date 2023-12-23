@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.books.BooksApplication
-import com.example.books.repository.BooksRepository
+import com.example.books.repository.BookRepository
 import com.example.books.ui.CustomViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
  *
  * @property key the key value to retrieve the book details from the API
  * */
-class BookDetailsVM(booksRepository: BooksRepository, private val key: String) : CustomViewModel(booksRepository) {
+class BookDetailsVM(private val booksRepository: BookRepository, private val key: String) : CustomViewModel() {
     private val _bookDetailsUiState = MutableStateFlow(BookDetailsUiState())
     val bookDetailsUiState = _bookDetailsUiState.asStateFlow()
 
@@ -37,7 +37,7 @@ class BookDetailsVM(booksRepository: BooksRepository, private val key: String) :
             override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
                 val application = (extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as BooksApplication)
                 val booksRepository = application.container.booksRepository
-                return modelClass.getConstructor(BooksRepository::class.java, String::class.java).newInstance(booksRepository, key)
+                return modelClass.getConstructor(BookRepository::class.java, String::class.java).newInstance(booksRepository, key)
             }
         }
     }

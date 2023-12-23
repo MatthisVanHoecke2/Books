@@ -28,11 +28,18 @@ fun BookDetailsScreen(key: String?) {
     val book = bookDetailsUiState.book
     val ratings = bookDetailsUiState.ratings
     val loading by viewModel.loading.collectAsState()
-    if (!loading) {
+    if (loading) {
+        Row(horizontalArrangement = Arrangement.Center) {
+            CircularProgressIndicator(
+                color = MaterialTheme.colorScheme.secondary,
+                trackColor = MaterialTheme.colorScheme.surfaceVariant,
+            )
+        }
+    } else {
         Column(verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium))) {
             DetailText(caption = "Title", text = { Text("${book?.title}") })
             DetailText(caption = "Ratings", text = { Text("${String.format("%.1f", ratings)}/5") })
-            if (book is BookDetail) {
+            if (book is BookDetail && book.covers.isNotEmpty()) {
                 val imageUrl = "https://covers.openlibrary.org/b/id/${book.covers.first()}-L.jpg"
                 Box(
                     modifier = Modifier
@@ -42,19 +49,12 @@ fun BookDetailsScreen(key: String?) {
                     SubcomposeAsyncImage(
                         model = imageUrl,
                         contentDescription = book.title,
-                        loading = { Text(book.title.toString()) },
+                        loading = { Text(book.title) },
                         contentScale = ContentScale.FillWidth,
                         modifier = Modifier.fillMaxSize(),
                     )
                 }
             }
-        }
-    } else {
-        Row(horizontalArrangement = Arrangement.Center) {
-            CircularProgressIndicator(
-                color = MaterialTheme.colorScheme.secondary,
-                trackColor = MaterialTheme.colorScheme.surfaceVariant,
-            )
         }
     }
 }

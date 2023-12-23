@@ -17,9 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -43,7 +40,6 @@ fun SearchBook(onNavigate: (String) -> Unit) {
     val search = homeUiState.search
     val searchResult = homeUiState.searchResult
     val loading by viewModel.loading.collectAsState()
-    var currentPage by remember { mutableIntStateOf(0) }
 
     Column {
         LazyVerticalGrid(
@@ -107,8 +103,7 @@ fun SearchBook(onNavigate: (String) -> Unit) {
                         )
                     } else if (searchResult.isNotEmpty()) {
                         Button(onClick = {
-                            currentPage += 1
-                            viewModel.expandSearch(offset = (currentPage * 25L))
+                            viewModel.expandSearch()
                         }) {
                             Text("Load more")
                         }

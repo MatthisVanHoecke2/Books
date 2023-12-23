@@ -69,7 +69,7 @@ fun BooksApp(navController: NavHostController = rememberNavController()) {
             topBar = {
                 TopBar(
                     onIconClick = {
-                        if (currentPage.canBack) {
+                        if (navController.previousBackStackEntry != null) {
                             navController.navigateUp()
                         } else {
                             scope.launch {
@@ -80,7 +80,7 @@ fun BooksApp(navController: NavHostController = rememberNavController()) {
                         }
                     },
                     title = stringResource(currentPage.displayName),
-                    icon = if (currentPage.canBack) Icons.Default.ArrowBack else Icons.Default.Menu,
+                    icon = if (navController.previousBackStackEntry != null) Icons.Default.ArrowBack else Icons.Default.Menu, // set icon based on functionality
                 )
             },
         ) {

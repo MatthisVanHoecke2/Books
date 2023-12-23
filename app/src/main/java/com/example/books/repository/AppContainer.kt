@@ -11,7 +11,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
 
 interface AppContainer {
-    val booksRepository: BooksRepository
+    val booksRepository: BookRepository
 }
 
 private val json = Json { ignoreUnknownKeys = true }
@@ -35,11 +35,11 @@ class DefaultAppContainer(private val context: Context) : AppContainer {
         retrofit.create(BooksApiService::class.java)
     }
 
-    private fun checkRepo(): Boolean {
+    private fun checkConnection(): Boolean {
         return isInternetAvailable(context)
     }
 
-    override val booksRepository: BooksRepository by lazy {
-        NetworkBooksRepository(booksApiService = retrofitService, database, ::checkRepo)
+    override val booksRepository: BookRepository by lazy {
+        NetworkBookRepository(booksApiService = retrofitService, database, ::checkConnection)
     }
 }

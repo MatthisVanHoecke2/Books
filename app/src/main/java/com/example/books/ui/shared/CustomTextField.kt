@@ -12,7 +12,6 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
 
 @Composable
@@ -58,7 +57,7 @@ fun CustomTextField(
         },
         leadingIcon = leadingIcon,
         placeholder = placeholder,
-        modifier = modifier.onFocusChanged { if (!it.hasFocus) onDone?.invoke() },
+        modifier = modifier,
         singleLine = true,
         colors = colors,
         keyboardActions = actions,

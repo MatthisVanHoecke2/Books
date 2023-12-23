@@ -9,6 +9,6 @@ data class Rating(
 
 @Serializable
 data class Summary(
-    val average: Double = 0.0,
+    val average: Double? = 0.0,
     val count: Int = 0,
 )
