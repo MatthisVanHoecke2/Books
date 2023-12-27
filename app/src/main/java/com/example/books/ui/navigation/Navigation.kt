@@ -71,7 +71,10 @@ fun Navigation(navController: NavHostController, padding: PaddingValues) {
                 },
             ),
         ) { navBackStackEntry ->
-            BookListDetailsScreen(navBackStackEntry.arguments?.getLong("id"))
+            val id: Long? = navBackStackEntry.arguments?.getLong("id")
+            if (id != null) {
+                BookListDetailsScreen(id = id, onNavigate = { navController.navigate("$homeRoute/$it") })
+            }
         }
     }
 }

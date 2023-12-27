@@ -41,7 +41,7 @@ interface BookRepository {
 class NetworkBookRepository(private val booksApiService: BooksApiService, private val database: BooksDatabase, private val checkConnection: () -> Boolean) : BookRepository {
 
     override suspend fun getBooks(query: String, offset: Long, limit: Long): List<Book> {
-        if (!checkConnection.invoke()) return database.bookDao().getAll()
+        if (!checkConnection.invoke()) return database.bookDao().getAll(query)
         return booksApiService.getBooks(query, offset, limit).docs.map { it.copy(key = it.key.replace("/works/", "")) }
     }
 

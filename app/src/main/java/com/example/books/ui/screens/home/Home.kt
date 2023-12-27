@@ -27,7 +27,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.SubcomposeAsyncImage
 import com.example.books.R
 import com.example.books.model.Book
-import com.example.books.network.data.books.BookIndex
 import com.example.books.ui.shared.CustomTextField
 
 @Composable
@@ -96,20 +95,16 @@ fun LazyGridScope.resultList(searchResult: List<Book>, onNavigate: (String) -> U
             }.padding(dimensionResource(R.dimen.padding_small)),
             horizontalArrangement = Arrangement.Center,
         ) {
-            if (book is BookIndex) {
-                if (book.coverId != null) {
-                    val imageUrl = "https://covers.openlibrary.org/b/id/${book.coverId}-L.jpg"
+            if (book.coverId != null) {
+                val imageUrl = "https://covers.openlibrary.org/b/id/${book.coverId}-L.jpg"
 
-                    SubcomposeAsyncImage(
-                        model = imageUrl,
-                        contentDescription = book.title,
-                        loading = { Text(book.title) },
-                        contentScale = ContentScale.FillWidth,
-                        modifier = Modifier.fillMaxSize(),
-                    )
-                } else {
-                    Text(book.title)
-                }
+                SubcomposeAsyncImage(
+                    model = imageUrl,
+                    contentDescription = book.title,
+                    loading = { Text(book.title) },
+                    contentScale = ContentScale.FillWidth,
+                    modifier = Modifier.fillMaxSize(),
+                )
             } else {
                 Text(book.title)
             }

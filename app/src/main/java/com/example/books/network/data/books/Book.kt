@@ -10,7 +10,7 @@ data class BookIndex(
     override val key: String,
     override val title: String,
     @SerialName(value = "cover_i")
-    val coverId: Long? = null,
+    override val coverId: Long? = null,
 ) : Book
 
 @Serializable
@@ -23,4 +23,5 @@ data class BookDetail(
     val authors: List<AuthorLine> = emptyList(),
     @SerialName(value = "first_publish_year")
     val publishYear: Int? = null,
+    override val coverId: Long? = null,
 ) : Book

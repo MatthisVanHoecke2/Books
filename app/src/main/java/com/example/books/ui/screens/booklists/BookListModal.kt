@@ -42,7 +42,7 @@ fun BookListModal(
         onDismiss = { onDismiss.invoke() },
         onConfirm = { onConfirm.invoke() },
         title = title,
-        text = {
+        content = {
             Column {
                 CustomTextField(
                     value = createDialogText,

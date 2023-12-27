@@ -12,6 +12,8 @@ data class BookEntity(
     override val key: String,
     override val title: String,
     @ColumnInfo(name = "first_publish_year")
-    val publishYear: Int,
+    val publishYear: Int? = null,
     val rating: Double,
+    @ColumnInfo(name = "cover_id")
+    override val coverId: Long? = null,
 ) : Book
