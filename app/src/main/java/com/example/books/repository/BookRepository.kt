@@ -3,7 +3,6 @@ package com.example.books.repository
 import com.example.books.model.Book
 import com.example.books.network.BooksApiService
 import com.example.books.persistence.BooksDatabase
-import java.util.concurrent.TimeoutException
 
 /**
  * Interface for book repository
@@ -43,28 +42,16 @@ class NetworkBookRepository(private val booksApiService: BooksApiService, privat
 
     override suspend fun getBooks(query: String, offset: Long, limit: Long): List<Book> {
         if (!checkConnection.invoke()) return database.bookDao().getAll()
-        return try {
-            booksApiService.getBooks(query, offset, limit).docs.map { it.copy(key = it.key.replace("/works/", "")) }
-        } catch (exception: TimeoutException) {
-            database.bookDao().getAll()
-        }
+        return booksApiService.getBooks(query, offset, limit).docs.map { it.copy(key = it.key.replace("/works/", "")) }
     }
 
     override suspend fun getBook(key: String): Book {
         if (!checkConnection.invoke()) return database.bookDao().getSingle(key)
-        return try {
-            booksApiService.getBook(key)
-        } catch (exception: TimeoutException) {
-            database.bookDao().getSingle(key)
-        }
+        return booksApiService.getBook(key)
     }
 
     override suspend fun getRatings(key: String): Double {
         if (!checkConnection.invoke()) return database.bookDao().getRating(key)
-        return try {
-            booksApiService.getRatings(key).summary.average ?: 0.0
-        } catch (exception: TimeoutException) {
-            database.bookDao().getRating(key)
-        }
+        return booksApiService.getRatings(key).summary.average ?: 0.0
     }
 }

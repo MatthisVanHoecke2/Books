@@ -4,4 +4,10 @@
     <string name="home_name">Home</string>
     <string name="bookdetails_route">home/{key}</string>
     <string name="bookdetails_name">Book Details</string>
+    <string name="booklists_route">booklists</string>
+    <string name="booklists_name">Book Lists</string>
+    <string name="booklistdetails_route">booklists/{id}</string>
+    <string name="booklistdetails_name">Book List Details</string>
+    <string name="confirm_text">confirm</string>
+    <string name="deny_text">deny</string>
 </resources>

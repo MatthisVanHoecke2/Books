@@ -54,8 +54,14 @@ fun BooksApp(navController: NavHostController = rememberNavController()) {
                 drawerShape = NavShape(0.dp, 0.7f),
                 drawerContainerColor = MaterialTheme.colorScheme.onPrimary,
             ) {
+                val currentRoute = stringResource(currentPage.route)
                 DrawerContent(onClick = {
-                    navController.navigate(it)
+                    navController.navigate(it) {
+                        launchSingleTop = true
+                        popUpTo(currentRoute) {
+                            inclusive = true
+                        }
+                    }
                     scope.launch {
                         drawerState.apply {
                             close()

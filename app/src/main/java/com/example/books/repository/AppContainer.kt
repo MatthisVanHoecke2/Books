@@ -12,6 +12,7 @@ import retrofit2.Retrofit
 
 interface AppContainer {
     val booksRepository: BookRepository
+    val bookListsRepository: BookListsRepository
 }
 
 private val json = Json { ignoreUnknownKeys = true }
@@ -41,5 +42,9 @@ class DefaultAppContainer(private val context: Context) : AppContainer {
 
     override val booksRepository: BookRepository by lazy {
         NetworkBookRepository(booksApiService = retrofitService, database, ::checkConnection)
+    }
+
+    override val bookListsRepository: BookListsRepository by lazy {
+        NetworkBookListRepository(database)
     }
 }
