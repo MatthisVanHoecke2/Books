@@ -13,7 +13,7 @@ interface BookListDao {
     @Insert
     suspend fun insert(bookList: BookList): Long
 
-    @Delete
+    @Delete()
     suspend fun delete(bookList: BookList)
 
     @Update

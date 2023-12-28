@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -31,29 +32,36 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.SubcomposeAsyncImage
 import com.example.books.R
 import com.example.books.model.Book
 import com.example.books.network.data.books.BookDetail
 import com.example.books.persistence.data.booklists.BookList
+import com.example.books.ui.screens.bookdetails.model.BookDetailsVM
+import com.example.books.ui.screens.bookdetails.model.BookGetApiState
+import com.example.books.ui.screens.bookdetails.model.BookInsertApiState
 import com.example.books.ui.shared.ConfirmDialog
+import com.example.books.ui.shared.CustomAlertDialog
 import com.example.books.ui.shared.DetailComponent
 
 @Composable
 fun BookDetailsScreen(key: String?) {
     val viewModel: BookDetailsVM = viewModel(factory = BookDetailsVM.Companion.Factory(key.toString()))
-    when (val apiState = viewModel.bookApiState) {
-        is BookApiState.Loading -> LoadingScreen()
-        is BookApiState.Success -> SuccessScreen(
+    when (val apiState = viewModel.bookGetApiState) {
+        is BookGetApiState.Loading -> LoadingScreen()
+        is BookGetApiState.Success -> SuccessScreen(
             book = apiState.book,
             ratings = apiState.rating,
             bookLists = apiState.bookLists,
             insertBookIntoList = {
                 viewModel.insertIntoList(bookList = it, book = apiState.book, rating = apiState.rating)
             },
+            apiState = viewModel.bookInsertApiState,
+            closeAlert = { viewModel.closeAlertDialog() },
         )
-        is BookApiState.Error -> ErrorScreen()
+        is BookGetApiState.Error -> ErrorScreen()
     }
 }
 
@@ -68,8 +76,26 @@ fun LoadingScreen() {
 }
 
 @Composable
-fun SuccessScreen(book: Book, ratings: Double, bookLists: List<BookList>, insertBookIntoList: (BookList) -> Unit) {
+fun SuccessScreen(book: Book, ratings: Double, bookLists: List<BookList>, insertBookIntoList: (BookList) -> Unit, apiState: BookInsertApiState, closeAlert: () -> Unit) {
     var openDialog by remember { mutableStateOf(false) }
+
+    when (apiState) {
+        is BookInsertApiState.Start -> {}
+        is BookInsertApiState.Success -> {
+            CustomAlertDialog(
+                title = { Text("Success", style = MaterialTheme.typography.titleLarge) },
+                text = { Text(apiState.message) },
+                onOk = { closeAlert.invoke() },
+            )
+        }
+        is BookInsertApiState.Error -> {
+            CustomAlertDialog(
+                title = { Text("Error", style = MaterialTheme.typography.titleLarge) },
+                text = { Text(apiState.message) },
+                onOk = { closeAlert.invoke() },
+            )
+        }
+    }
 
     if (openDialog) {
         ConfirmDialog(
@@ -77,6 +103,9 @@ fun SuccessScreen(book: Book, ratings: Double, bookLists: List<BookList>, insert
             onDismiss = { openDialog = false },
             onConfirm = { openDialog = false },
             title = { Text("Choose list", style = MaterialTheme.typography.titleLarge) },
+            dismissButton = { },
+            confirmButton = { },
+            modifier = Modifier.heightIn(0.dp, 200.dp),
         ) {
             LazyColumn {
                 items(bookLists) {
@@ -99,8 +128,9 @@ fun SuccessScreen(book: Book, ratings: Double, bookLists: List<BookList>, insert
     ) {
         DetailComponent(caption = "Title", content = { Text(book.title) })
         DetailComponent(caption = "Ratings", content = { Text("${String.format("%.1f", ratings)}/5") })
-        if (book is BookDetail && book.covers.isNotEmpty()) {
-            val imageUrl = "https://covers.openlibrary.org/b/id/${book.covers.first()}-L.jpg"
+        if (book.coverId != null || (book is BookDetail && book.covers.isNotEmpty())) {
+            val cover = if (book.coverId != null) book.coverId else (book as BookDetail).covers.first()
+            val imageUrl = "https://covers.openlibrary.org/b/id/$cover-L.jpg"
             Box(
                 modifier = Modifier
                     .width(dimensionResource(R.dimen.cover_width))

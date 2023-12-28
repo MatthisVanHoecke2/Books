@@ -1,4 +1,4 @@
-package com.example.books.ui.screens.booklists
+package com.example.books.ui.screens.booklists.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import com.example.books.R
+import com.example.books.ui.screens.booklists.model.BookListModalDBState
 import com.example.books.ui.shared.ConfirmDialog
 import com.example.books.ui.shared.CustomTextField
 

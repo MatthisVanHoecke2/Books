@@ -1,6 +1,7 @@
 package com.example.books.persistence
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Transaction
@@ -11,7 +12,10 @@ import com.example.books.persistence.data.books.BookEntity
 @Dao
 interface BookListLineDao : BookDao {
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    fun insertBookListLine(bookListLine: BookListLine)
+    suspend fun insertBookListLine(bookListLine: BookListLine)
+
+    @Delete
+    suspend fun deleteBookList(bookListLine: BookListLine)
 
     @Transaction
     suspend fun insertWithListLine(bookList: BookList, book: BookEntity) {

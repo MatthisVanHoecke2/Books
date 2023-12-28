@@ -1,4 +1,4 @@
-package com.example.books.ui.screens.booklistdetails
+package com.example.books.ui.screens.booklistdetails.model
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -9,33 +9,47 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.books.BooksApplication
 import com.example.books.model.Book
+import com.example.books.persistence.data.booklists.BookListLine
 import com.example.books.repository.BookListsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.io.IOException
 
-sealed interface BookListApiState {
-    data object Loading : BookListApiState
-    data class Success(val bookList: List<Book>) : BookListApiState
-    data object Error : BookListApiState
+sealed interface BookListGetApiState {
+    data object Loading : BookListGetApiState
+    data class Success(val bookList: List<Book>) : BookListGetApiState
+    data object Error : BookListGetApiState
 }
 
 class BookListDetailsViewModel(private val bookListRepository: BookListsRepository, private val id: Long) : ViewModel() {
-    var bookListApiState: BookListApiState by mutableStateOf(BookListApiState.Loading)
+    var bookListApiState: BookListGetApiState by mutableStateOf(BookListGetApiState.Loading)
         private set
 
     private val _bookListUiState = MutableStateFlow(BookListDetailsUiState())
-    val bookListUiState = _bookListUiState.asStateFlow()
 
     init {
         viewModelScope.launch {
             bookListApiState = try {
                 val list = bookListRepository.getBookListById(id)
                 _bookListUiState.update { it.copy(bookList = list) }
-                BookListApiState.Success(list)
-            } catch (ex: Exception) {
-                BookListApiState.Error
+                BookListGetApiState.Success(list)
+            } catch (ex: IOException) {
+                BookListGetApiState.Error
+            }
+        }
+    }
+
+    fun deleteBook(bookKey: String) {
+        viewModelScope.launch {
+            bookListApiState = try {
+                bookListRepository.deleteBookFromList(BookListLine(id, bookKey))
+                val list = _bookListUiState.value.bookList.toMutableList()
+                list.removeIf { it.key == bookKey }
+                _bookListUiState.update { it.copy(bookList = list) }
+                BookListGetApiState.Success(list)
+            } catch (ex: IOException) {
+                BookListGetApiState.Error
             }
         }
     }

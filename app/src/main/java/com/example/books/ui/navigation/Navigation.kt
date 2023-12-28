@@ -41,9 +41,9 @@ fun Navigation(navController: NavHostController, padding: PaddingValues) {
         }
         composable(
             route = bookDetailsRoute,
-            enterTransition = { slideInAnimation() },
+            enterTransition = { rightSlideInAnimation() },
             exitTransition = { fadeOutAnimation() },
-            popExitTransition = { popSlideOutAnimation() },
+            popExitTransition = { rightSlideOutAnimation() },
             arguments = listOf(
                 navArgument("key") {
                     type = NavType.StringType
@@ -62,9 +62,10 @@ fun Navigation(navController: NavHostController, padding: PaddingValues) {
         }
         composable(
             route = bookListDetailsRoute,
-            enterTransition = { slideInAnimation() },
+            enterTransition = { rightSlideInAnimation() },
             exitTransition = { fadeOutAnimation() },
-            popExitTransition = { popSlideOutAnimation() },
+            popEnterTransition = { leftSlideInAnimation() },
+            popExitTransition = { rightSlideOutAnimation() },
             arguments = listOf(
                 navArgument("id") {
                     type = NavType.LongType
@@ -86,13 +87,13 @@ fun fadeOutAnimation(): ExitTransition {
     return fadeOut(animationSpec = tween(220))
 }
 
-fun slideInAnimation(): EnterTransition {
+fun rightSlideInAnimation(): EnterTransition {
     return slideInHorizontally(animationSpec = tween(220)) { it } + fadeIn(animationSpec = tween(220))
 }
 
 fun leftSlideInAnimation(): EnterTransition {
     return slideInHorizontally(animationSpec = tween(220)) + fadeIn(animationSpec = tween(220))
 }
-fun popSlideOutAnimation(): ExitTransition {
+fun rightSlideOutAnimation(): ExitTransition {
     return slideOutHorizontally(animationSpec = tween(220)) { it } + fadeOut(animationSpec = tween(220))
 }

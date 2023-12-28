@@ -1,4 +1,4 @@
-package com.example.books.ui.screens.bookdetails
+package com.example.books.ui.screens.bookdetails.model
 
 import android.database.sqlite.SQLiteConstraintException
 import androidx.compose.runtime.getValue
@@ -21,10 +21,16 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.IOException
 
-sealed interface BookApiState {
-    data class Success(val book: Book, val rating: Double, val bookLists: List<BookList>) : BookApiState
-    data object Loading : BookApiState
-    data object Error : BookApiState
+sealed interface BookGetApiState {
+    data class Success(val book: Book, val rating: Double, val bookLists: List<BookList>) : BookGetApiState
+    data object Loading : BookGetApiState
+    data object Error : BookGetApiState
+}
+
+sealed interface BookInsertApiState {
+    data object Start : BookInsertApiState
+    data class Success(val message: String) : BookInsertApiState
+    data class Error(val message: String) : BookInsertApiState
 }
 
 /**
@@ -33,14 +39,16 @@ sealed interface BookApiState {
  * @property key the key value to retrieve the book details from the API
  * */
 class BookDetailsVM(private val booksRepository: BookRepository, private val bookListsRepository: BookListsRepository, private val key: String) : ViewModel() {
-    var bookApiState: BookApiState by mutableStateOf(BookApiState.Loading)
+    var bookGetApiState: BookGetApiState by mutableStateOf(BookGetApiState.Loading)
+        private set
+    var bookInsertApiState: BookInsertApiState by mutableStateOf(BookInsertApiState.Start)
         private set
 
     private val _bookDetailsApiState = MutableStateFlow(BookDetailsUiState())
 
     init {
         viewModelScope.launch {
-            bookApiState = try {
+            bookGetApiState = try {
                 val bookRequest = async { booksRepository.getBook(key) }
                 val ratingsRequest = async { booksRepository.getRatings(key) }
                 val bookListsRequest = async { bookListsRepository.getLists() }
@@ -48,9 +56,9 @@ class BookDetailsVM(private val booksRepository: BookRepository, private val boo
                 val ratings = ratingsRequest.await()
                 val bookLists = bookListsRequest.await()
                 _bookDetailsApiState.update { it.copy(bookLists = bookLists) }
-                BookApiState.Success(book, ratings, bookLists)
+                BookGetApiState.Success(book, ratings, bookLists)
             } catch (ex: Exception) {
-                BookApiState.Error
+                BookGetApiState.Error
             }
         }
     }
@@ -69,15 +77,19 @@ class BookDetailsVM(private val booksRepository: BookRepository, private val boo
         }
 
         viewModelScope.launch {
-            try {
+            bookInsertApiState = try {
                 bookListsRepository.insertIntoList(bookList, bookEntity)
-                BookApiState.Success(book, rating, _bookDetailsApiState.value.bookLists)
+                BookInsertApiState.Success("Book '${book.title}' has been successfully added to list '${bookList.listName}'")
             } catch (ex: IOException) {
-                BookApiState.Error
+                BookInsertApiState.Error("An unexpected error occurred, book '${book.title}' could not be added to list '${bookList.listName}'")
             } catch (ex: SQLiteConstraintException) {
-                BookApiState.Error
+                BookInsertApiState.Error("List '${bookList.listName}' already contains book '${book.title}'")
             }
         }
+    }
+
+    fun closeAlertDialog() {
+        bookInsertApiState = BookInsertApiState.Start
     }
 
     companion object {

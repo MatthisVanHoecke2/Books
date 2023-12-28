@@ -1,4 +1,4 @@
-package com.example.books.ui.screens.booklists
+package com.example.books.ui.screens.booklists.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
@@ -17,6 +17,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
 import com.example.books.R
 import com.example.books.persistence.data.booklists.BookList
+import com.example.books.ui.screens.booklists.model.BookListModalDBState
 import com.example.books.ui.shared.ConfirmDialog
 import com.example.books.ui.shared.CustomOptionsDropDown
 import com.example.books.ui.shared.DropdownItem

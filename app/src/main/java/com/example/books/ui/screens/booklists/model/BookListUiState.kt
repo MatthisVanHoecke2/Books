@@ -1,4 +1,4 @@
-package com.example.books.ui.screens.booklists
+package com.example.books.ui.screens.booklists.model
 
 import com.example.books.persistence.data.booklists.BookList
 

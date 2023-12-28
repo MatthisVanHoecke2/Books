@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
@@ -30,6 +30,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.books.R
 import com.example.books.persistence.data.booklists.BookList
+import com.example.books.ui.screens.booklists.components.BookListItem
+import com.example.books.ui.screens.booklists.components.BookListModal
+import com.example.books.ui.screens.booklists.model.BookListDBState
+import com.example.books.ui.screens.booklists.model.BookListModalDBState
+import com.example.books.ui.screens.booklists.model.BookListViewModel
 
 @Composable
 fun BookLists(onNavigate: (Long) -> Unit) {
@@ -95,9 +100,9 @@ fun SuccessScreen(
     padding: PaddingValues,
 ) {
     LazyColumn(modifier = Modifier.padding(padding)) {
-        items(bookLists) {
+        itemsIndexed(bookLists) { index, book ->
             BookListItem(
-                bookList = it,
+                bookList = book,
                 createDialogText = createDialogText,
                 onTextChange = onTextChange,
                 onRenameList = onRenameList,
@@ -105,7 +110,9 @@ fun SuccessScreen(
                 dbModalState = dbModalState,
                 onNavigate = onNavigate,
             )
-            Divider(color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.2f))
+            if (index < bookLists.lastIndex) {
+                Divider(color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.2f))
+            }
         }
     }
 }

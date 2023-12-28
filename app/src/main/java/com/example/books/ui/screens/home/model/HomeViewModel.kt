@@ -1,4 +1,4 @@
-package com.example.books.ui.screens.home
+package com.example.books.ui.screens.home.model
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -50,9 +50,11 @@ class HomeViewModel(private val booksRepository: BookRepository) : ViewModel() {
     /**
      * Queries the API for books based on the search value,
      * and loads the filtered list into the [homeUiState]
+     * @param limit limit total amount of requested items
      * */
-    fun searchApi() {
+    fun searchApi(limit: Long = 25) {
         bookApiState = BookApiState.Loading
+        _homeUiState.update { it.copy(searchResult = emptyList()) }
         val search = homeUiState.value.search
         viewModelScope.launch {
             bookApiState = try {
@@ -60,7 +62,7 @@ class HomeViewModel(private val booksRepository: BookRepository) : ViewModel() {
                     BookApiState.Start
                 } else {
                     val result = booksRepository.getBooks(search)
-                    _homeUiState.update { it.copy(currentPage = 0, searchResult = result) }
+                    _homeUiState.update { it.copy(currentPage = 0, searchResult = result, endOfList = result.size < limit) }
                     BookApiState.Success(result)
                 }
             } catch (ex: IOException) {
@@ -81,7 +83,7 @@ class HomeViewModel(private val booksRepository: BookRepository) : ViewModel() {
                 val result = booksRepository.getBooks(homeUiState.value.search, offset = _homeUiState.value.currentPage * limit, limit = limit)
                 val list = homeUiState.value.searchResult.toMutableList()
                 list.addAll(result)
-                _homeUiState.update { it.copy(searchResult = list) }
+                _homeUiState.update { it.copy(searchResult = list, endOfList = result.size < limit) }
                 BookApiState.Success(list)
             } catch (ex: IOException) {
                 BookApiState.Error

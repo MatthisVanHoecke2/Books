@@ -2,6 +2,7 @@ package com.example.books.repository
 
 import com.example.books.model.Book
 import com.example.books.network.BooksApiService
+import com.example.books.network.data.books.asEntityObject
 import com.example.books.persistence.BooksDatabase
 
 /**
@@ -41,13 +42,16 @@ interface BookRepository {
 class NetworkBookRepository(private val booksApiService: BooksApiService, private val database: BooksDatabase, private val checkConnection: () -> Boolean) : BookRepository {
 
     override suspend fun getBooks(query: String, offset: Long, limit: Long): List<Book> {
-        if (!checkConnection.invoke()) return database.bookDao().getAll(query)
+        if (!checkConnection.invoke()) return database.bookDao().getAll(query, offset, limit)
         return booksApiService.getBooks(query, offset, limit).docs.map { it.copy(key = it.key.replace("/works/", "")) }
     }
 
     override suspend fun getBook(key: String): Book {
         if (!checkConnection.invoke()) return database.bookDao().getSingle(key)
-        return booksApiService.getBook(key)
+        val ratings = getRatings(key)
+        val book = booksApiService.getBook(key)
+        database.bookDao().update(book.asEntityObject(ratings))
+        return book
     }
 
     override suspend fun getRatings(key: String): Double {

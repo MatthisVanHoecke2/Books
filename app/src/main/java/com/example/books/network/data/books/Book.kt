@@ -1,7 +1,7 @@
 package com.example.books.network.data.books
 
 import com.example.books.model.Book
-import com.example.books.network.data.authors.AuthorLine
+import com.example.books.persistence.data.books.BookEntity
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -19,9 +19,17 @@ data class BookDetail(
     override val key: String,
     val covers: List<Long> = emptyList(),
     override val title: String,
-    @SerialName(value = "authors")
-    val authors: List<AuthorLine> = emptyList(),
     @SerialName(value = "first_publish_year")
     val publishYear: Int? = null,
     override val coverId: Long? = null,
 ) : Book
+
+fun BookDetail.asEntityObject(rating: Double): BookEntity {
+    return BookEntity(
+        key = this.key.replace("/works/", ""),
+        title = this.title,
+        publishYear = this.publishYear,
+        rating = rating,
+        coverId = this.covers.first(),
+    )
+}

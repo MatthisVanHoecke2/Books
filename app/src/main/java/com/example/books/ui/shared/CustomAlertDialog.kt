@@ -1,6 +1,7 @@
 package com.example.books.ui.shared
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,36 +21,21 @@ import androidx.compose.ui.window.Dialog
 import com.example.books.R
 
 /**
- * Custom composable confirm dialog
- * @param onDismiss callback for closing the dialog
- * @param onConfirm callback for confirming
- * @param title composable title
- * @param content composable content
+ * Custom composable alert dialog
+ * @param title composable dialog title
+ * @param text composable dialog text
+ * @param onOk callback function to be performed when 'Ok' is clicked
  * */
 @Composable
-fun ConfirmDialog(
-    modifier: Modifier = Modifier,
-    icon: @Composable() () -> Unit = { Icon(Icons.Default.Info, contentDescription = "info icon") },
-    onDismiss: () -> Unit,
-    onConfirm: () -> Unit,
-    confirmButton: @Composable() () -> Unit = {
-        Button(onClick = { onConfirm.invoke() }) {
-            Text("Confirm")
-        }
-    },
-    dismissButton: @Composable() () -> Unit = {
-        Button(onClick = { onDismiss.invoke() }) {
-            Text("Cancel")
-        }
-    },
+fun CustomAlertDialog(
     title: @Composable() () -> Unit,
-    content: @Composable() () -> Unit,
+    text: @Composable() () -> Unit,
+    onOk: () -> Unit,
 ) {
     Dialog(
-        onDismissRequest = { onDismiss.invoke() },
+        onDismissRequest = { onOk.invoke() },
     ) {
         Surface(
-            modifier = modifier,
             shape = MaterialTheme.shapes.large,
             shadowElevation = dimensionResource(R.dimen.padding_small),
         ) {
@@ -58,16 +44,17 @@ fun ConfirmDialog(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_large)),
             ) {
-                icon.invoke()
+                Icon(Icons.Default.Info, "dialog icon")
                 title.invoke()
-                content.invoke()
+                text.invoke()
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End,
                 ) {
-                    Row(horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium))) {
-                        dismissButton.invoke()
-                        confirmButton.invoke()
+                    Box {
+                        Button(onClick = { onOk.invoke() }) {
+                            Text("Ok")
+                        }
                     }
                 }
             }

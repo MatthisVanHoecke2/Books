@@ -3,6 +3,7 @@ package com.example.books.repository
 import com.example.books.model.Book
 import com.example.books.persistence.BooksDatabase
 import com.example.books.persistence.data.booklists.BookList
+import com.example.books.persistence.data.booklists.BookListLine
 import com.example.books.persistence.data.books.BookEntity
 
 interface BookListsRepository {
@@ -11,6 +12,8 @@ interface BookListsRepository {
     suspend fun createList(name: String): Long
 
     suspend fun deleteList(bookList: BookList)
+
+    suspend fun deleteBookFromList(bookListLine: BookListLine)
 
     suspend fun updateList(bookList: BookList)
 
@@ -30,6 +33,10 @@ class NetworkBookListRepository(private val database: BooksDatabase) : BookLists
 
     override suspend fun deleteList(bookList: BookList) {
         database.bookListDao().delete(bookList)
+    }
+
+    override suspend fun deleteBookFromList(bookListLine: BookListLine) {
+        database.bookListLineDao().deleteBookList(bookListLine)
     }
 
     override suspend fun updateList(bookList: BookList) {

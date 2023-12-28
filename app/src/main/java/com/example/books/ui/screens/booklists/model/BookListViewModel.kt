@@ -1,4 +1,4 @@
-package com.example.books.ui.screens.booklists
+package com.example.books.ui.screens.booklists.model
 
 import android.database.sqlite.SQLiteConstraintException
 import androidx.compose.runtime.getValue
@@ -96,6 +96,7 @@ class BookListViewModel(private val bookListsRepository: BookListsRepository) : 
 
     fun updateList(bookList: BookList) {
         bookListModalDBState = BookListModalDBState.Loading
+
         viewModelScope.launch {
             bookListModalDBState = try {
                 bookListsRepository.updateList(bookList)
