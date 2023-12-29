@@ -68,7 +68,6 @@ class BookDetailsVM(private val booksRepository: BookRepository, private val boo
             BookEntity(
                 key = book.key.replace("/works/", ""),
                 title = book.title,
-                publishYear = book.publishYear,
                 rating = rating,
                 coverId = book.covers.first(),
             )

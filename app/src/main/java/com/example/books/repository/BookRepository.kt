@@ -4,7 +4,6 @@ import com.example.books.model.Book
 import com.example.books.network.BooksApiService
 import com.example.books.network.data.books.asEntityObject
 import com.example.books.persistence.BooksDatabase
-import com.example.books.persistence.data.books.BookEntity
 
 /**
  * Interface for book repository
@@ -32,8 +31,6 @@ interface BookRepository {
      * @return the selected books rating
      * */
     suspend fun getRatings(key: String): Double
-
-    suspend fun insertBook(book: BookEntity)
 }
 
 /**
@@ -60,9 +57,5 @@ class NetworkBookRepository(private val booksApiService: BooksApiService, privat
     override suspend fun getRatings(key: String): Double {
         if (!checkConnection.invoke()) return database.bookDao().getRating(key)
         return booksApiService.getRatings(key).summary.average ?: 0.0
-    }
-
-    override suspend fun insertBook(book: BookEntity) {
-        database.bookDao().insert(book)
     }
 }
