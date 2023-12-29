@@ -24,7 +24,7 @@ import java.io.IOException
 sealed interface BookGetApiState {
     data class Success(val book: Book, val rating: Double, val bookLists: List<BookList>) : BookGetApiState
     data object Loading : BookGetApiState
-    data object Error : BookGetApiState
+    data class Error(val message: String) : BookGetApiState
 }
 
 sealed interface BookInsertApiState {
@@ -58,7 +58,7 @@ class BookDetailsVM(private val booksRepository: BookRepository, private val boo
                 _bookDetailsApiState.update { it.copy(bookLists = bookLists) }
                 BookGetApiState.Success(book, ratings, bookLists)
             } catch (ex: Exception) {
-                BookGetApiState.Error
+                BookGetApiState.Error("An error occurred while fetching the book details")
             }
         }
     }
@@ -66,7 +66,7 @@ class BookDetailsVM(private val booksRepository: BookRepository, private val boo
     fun insertIntoList(bookList: BookList, book: Book, rating: Double) {
         val bookEntity: BookEntity = if (book is BookDetail) {
             BookEntity(
-                key = book.key,
+                key = book.key.replace("/works/", ""),
                 title = book.title,
                 publishYear = book.publishYear,
                 rating = rating,

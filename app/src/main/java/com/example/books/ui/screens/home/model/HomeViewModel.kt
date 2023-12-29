@@ -21,7 +21,7 @@ sealed interface BookApiState {
     data object Start : BookApiState
     data class Success(val books: List<Book>) : BookApiState
     data object Loading : BookApiState
-    data object Error : BookApiState
+    data class Error(val message: String) : BookApiState
 }
 
 /**
@@ -66,7 +66,7 @@ class HomeViewModel(private val booksRepository: BookRepository) : ViewModel() {
                     BookApiState.Success(result)
                 }
             } catch (ex: IOException) {
-                BookApiState.Error
+                BookApiState.Error("An error occurred while fetching books")
             }
         }
     }
@@ -86,7 +86,7 @@ class HomeViewModel(private val booksRepository: BookRepository) : ViewModel() {
                 _homeUiState.update { it.copy(searchResult = list, endOfList = result.size < limit) }
                 BookApiState.Success(list)
             } catch (ex: IOException) {
-                BookApiState.Error
+                BookApiState.Error("An error occurred while fetching books")
             }
         }
     }

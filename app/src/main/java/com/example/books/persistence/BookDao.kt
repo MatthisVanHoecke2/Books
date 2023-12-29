@@ -1,14 +1,12 @@
 package com.example.books.persistence
 
 import androidx.room.Dao
-import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.example.books.persistence.data.books.BookEntity
 
 @Dao
 interface BookDao {
-    @Insert
     suspend fun insert(book: BookEntity)
 
     @Update

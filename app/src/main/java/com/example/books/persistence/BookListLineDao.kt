@@ -10,8 +10,11 @@ import com.example.books.persistence.data.booklists.BookListLine
 import com.example.books.persistence.data.books.BookEntity
 
 @Dao
-interface BookListLineDao : BookDao {
-    @Insert(onConflict = OnConflictStrategy.ABORT)
+interface BookListLineDao {
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertBook(book: BookEntity)
+
+    @Insert
     suspend fun insertBookListLine(bookListLine: BookListLine)
 
     @Delete
@@ -19,7 +22,7 @@ interface BookListLineDao : BookDao {
 
     @Transaction
     suspend fun insertWithListLine(bookList: BookList, book: BookEntity) {
-        insert(book.copy(key = book.key.replace("/works/", "")))
+        insertBook(book.copy(key = book.key.replace("/works/", "")))
         insertBookListLine(BookListLine(bookList.bookListId, book.key.replace("/works/", "")))
     }
 }

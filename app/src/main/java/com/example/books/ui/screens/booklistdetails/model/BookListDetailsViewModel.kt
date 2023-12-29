@@ -19,7 +19,7 @@ import java.io.IOException
 sealed interface BookListGetApiState {
     data object Loading : BookListGetApiState
     data class Success(val bookList: List<Book>) : BookListGetApiState
-    data object Error : BookListGetApiState
+    data class Error(val message: String) : BookListGetApiState
 }
 
 class BookListDetailsViewModel(private val bookListRepository: BookListsRepository, private val id: Long) : ViewModel() {
@@ -35,7 +35,7 @@ class BookListDetailsViewModel(private val bookListRepository: BookListsReposito
                 _bookListUiState.update { it.copy(bookList = list) }
                 BookListGetApiState.Success(list)
             } catch (ex: IOException) {
-                BookListGetApiState.Error
+                BookListGetApiState.Error("An error occurred while fetching the list")
             }
         }
     }
@@ -49,7 +49,7 @@ class BookListDetailsViewModel(private val bookListRepository: BookListsReposito
                 _bookListUiState.update { it.copy(bookList = list) }
                 BookListGetApiState.Success(list)
             } catch (ex: IOException) {
-                BookListGetApiState.Error
+                BookListGetApiState.Error("An error occurred while trying to delete a book from the list")
             }
         }
     }
