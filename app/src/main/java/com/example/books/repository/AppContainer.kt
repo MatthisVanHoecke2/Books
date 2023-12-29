@@ -10,6 +10,11 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
 
+/**
+ * Interface for creating a container class for holding variables needed to be accessible everywhere in the application
+ * @property booksRepository value for holding the [BookRepository] instance
+ * @property bookListsRepository value for holding the [BookListsRepository] instance
+ * */
 interface AppContainer {
     val booksRepository: BookRepository
     val bookListsRepository: BookListsRepository
@@ -17,6 +22,10 @@ interface AppContainer {
 
 private val json = Json { ignoreUnknownKeys = true }
 
+/**
+ * Real class implementation of [AppContainer]
+ * @property context application context
+ * */
 class DefaultAppContainer(private val context: Context) : AppContainer {
     private val BASE_URL =
         "https://openlibrary.org"

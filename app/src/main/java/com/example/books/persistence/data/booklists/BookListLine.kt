@@ -6,7 +6,7 @@ import androidx.room.ForeignKey
 import com.example.books.persistence.data.books.BookEntity
 
 /**
- * Entity class for connecting books to a list of books
+ * Associate entity class for connecting books to a list of books
  * @property bookListId primary key of a book list
  * @property bookKey primary key of a book
  * */

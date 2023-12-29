@@ -10,6 +10,9 @@ import androidx.compose.ui.Modifier
 import com.example.books.ui.BooksApp
 import com.example.compose.BooksTheme
 
+/**
+ * Main activity to display the application screen
+ * */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

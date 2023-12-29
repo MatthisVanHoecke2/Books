@@ -11,7 +11,7 @@ import com.example.books.persistence.data.books.BookEntity
 @Dao
 interface BookDao {
     /**
-     * Update a books data
+     * Updates a book
      * @param book entity instance of book
      * */
     @Update

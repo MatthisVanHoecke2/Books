@@ -6,19 +6,53 @@ import com.example.books.persistence.data.booklists.BookList
 import com.example.books.persistence.data.booklists.BookListLine
 import com.example.books.persistence.data.books.BookEntity
 
+/**
+ * Interface for book list repository
+ * */
 interface BookListsRepository {
+    /**
+     * Retrieves a list of book lists from the Room database
+     * @return a [List] containing the queried [BookList]s
+     * */
     suspend fun getLists(): List<BookList>
 
+    /**
+     * Creates a book list with a given name
+     * @param name book list name
+     * @return the book list id
+     * */
     suspend fun createList(name: String): Long
 
+    /**
+     * Deletes a book list
+     * @param bookList book list entity to delete
+     * */
     suspend fun deleteList(bookList: BookList)
 
+    /**
+     * Deletes a book list line
+     * @param bookListLine book list line entity to delete
+     * */
     suspend fun deleteBookFromList(bookListLine: BookListLine)
 
+    /**
+     * Updates a book list
+     * @param bookList book list entity to delete
+     * */
     suspend fun updateList(bookList: BookList)
 
+    /**
+     * Retrieves a list of books by book list id
+     * @param id primary key of the book list to retrieve
+     * @return the list of books inside a book list
+     * */
     suspend fun getBookListById(id: Long): List<Book>
 
+    /**
+     * Inserts a specific book into a book list
+     * @param bookList book list to insert book into
+     * @param book book to insert into book list
+     * */
     suspend fun insertIntoList(bookList: BookList, book: BookEntity)
 }
 
