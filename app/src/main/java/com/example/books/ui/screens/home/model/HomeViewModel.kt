@@ -81,7 +81,7 @@ class HomeViewModel(private val booksRepository: BookRepository) : ViewModel() {
                 if (homeUiState.value.search.isEmpty()) {
                     BookApiState.Start
                 } else {
-                    val result = booksRepository.getBooks(search)
+                    val result = booksRepository.getBooks(query = search, limit = limit)
                     _homeUiState.update { it.copy(currentPage = 0, searchResult = result, endOfList = result.size < limit) }
                     BookApiState.Success(result)
                 }

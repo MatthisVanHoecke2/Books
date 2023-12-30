@@ -8,7 +8,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import com.example.books.R
 
@@ -28,7 +30,7 @@ fun TopBar(
     TopAppBar(
         title = { Text(text = title) },
         navigationIcon = {
-            IconButton(onClick = { onIconClick.invoke() }) {
+            IconButton(onClick = { onIconClick.invoke() }, modifier = Modifier.testTag("menuButton")) {
                 Icon(icon, contentDescription = "toggle drawer")
             }
         },
