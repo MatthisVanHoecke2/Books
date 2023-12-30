@@ -34,7 +34,7 @@ class BookListDetailsViewModelTest {
     }
 
     @Test
-    fun homeViewModel_getBookList_verifyBookListApiState() = runTest {
+    fun bookListDetailsViewModel_getBookList_verifyBookListApiState() = runTest {
         val id = 1L
         val viewModel = BookListDetailsViewModel(bookListsRepository, id)
         val bookList = FakeDataSource.bookLists.first { it.bookListId == id }
@@ -43,7 +43,7 @@ class BookListDetailsViewModelTest {
     }
 
     @Test
-    fun homeViewModel_deleteBook_verifyBookListApiState() = runTest {
+    fun bookListDetailsViewModel_deleteBook_verifyBookListApiState() = runTest {
         val keyToRemove = "OL1568131W"
         val id = 1L
         val viewModel = BookListDetailsViewModel(bookListsRepository, id)

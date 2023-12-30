@@ -13,7 +13,7 @@ import com.example.books.ui.screens.bookdetails.model.BookDetailsViewModel
 import com.example.books.ui.screens.bookdetails.model.BookGetApiState
 import com.example.books.ui.screens.bookdetails.model.BookInsertApiState
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -44,23 +44,23 @@ class BookDetailsViewModelTest {
     }
 
     @Test
-    fun homeViewModel_getBooks_verifyBookGetApiState() = runTest {
+    fun bookDetailsViewModel_getBooks_verifyBookGetApiState() = runTest {
         val key = "OL1568131W"
         val viewModel = BookDetailsViewModel(booksRepository, bookListsRepository, key)
         val book = FakeDataSource.bookDetails.first { it.key == key }
         val rating = FakeDataSource.ratings.first { it.first == key }.second.summary.average!!
         val bookLists = FakeDataSource.bookLists
-        Assert.assertEquals(BookGetApiState.Success(book, rating, bookLists), viewModel.bookGetApiState)
+        assertEquals(BookGetApiState.Success(book, rating, bookLists), viewModel.bookGetApiState)
     }
 
     @Test
-    fun homeViewModel_insertIntoList_verifyBookInsertApiState() = runTest {
+    fun bookDetailsViewModel_insertIntoList_verifyBookInsertApiState() = runTest {
         val key = "OL1568131W"
         val viewModel = BookDetailsViewModel(booksRepository, bookListsRepository, key)
         val book = FakeDataSource.bookDetails.first { it.key == key }
         val rating = FakeDataSource.ratings.first { it.first == key }.second.summary.average!!
         val bookList = FakeDataSource.bookLists.last()
         viewModel.insertIntoList(bookList, book, rating)
-        Assert.assertEquals(BookInsertApiState.Success("Book '${book.title}' has been successfully added to list '${bookList.listName}'"), viewModel.bookInsertApiState)
+        assertEquals(BookInsertApiState.Success("Book '${book.title}' has been successfully added to list '${bookList.listName}'"), viewModel.bookInsertApiState)
     }
 }

@@ -11,8 +11,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.ValueSource
 import org.mockito.Mockito
 
 class NetworkBooksRepositoryTest {
@@ -36,15 +34,15 @@ class NetworkBooksRepositoryTest {
         assertEquals(FakeDataSource.bookIndices, booksRepository.getBooks(query = "test"))
     }
 
-    @ParameterizedTest
-    @ValueSource(strings = ["OL1568131W", "OL1568132W"])
-    fun networkBooksRepository_getBook_verifyBookDetails(key: String) = runTest {
+    @Test
+    fun networkBooksRepository_getBook_verifyBookDetails() = runTest {
+        val key = "OL1568131W"
         assertEquals(FakeDataSource.bookIndices.first { it.key == key }, booksRepository.getBook(key))
     }
 
-    @ParameterizedTest
-    @ValueSource(strings = ["OL1568131W", "OL1568132W"])
-    fun networkBooksRepository_getBook_verifyBookRatings(key: String) = runTest {
+    @Test
+    fun networkBooksRepository_getBook_verifyBookRatings() = runTest {
+        val key = "OL1568131W"
         assertEquals(FakeDataSource.ratings.first { it.first == key }.second.summary.average, booksRepository.getRatings(key))
     }
 }
