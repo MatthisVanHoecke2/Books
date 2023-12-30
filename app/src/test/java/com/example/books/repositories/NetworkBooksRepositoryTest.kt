@@ -37,7 +37,7 @@ class NetworkBooksRepositoryTest {
     @Test
     fun networkBooksRepository_getBook_verifyBookDetails() = runTest {
         val key = "OL1568131W"
-        assertEquals(FakeDataSource.bookIndices.first { it.key == key }, booksRepository.getBook(key))
+        assertEquals(FakeDataSource.bookDetails.first { it.key == key }, booksRepository.getBook(key))
     }
 
     @Test

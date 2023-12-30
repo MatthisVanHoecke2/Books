@@ -116,7 +116,7 @@ class BookListViewModel(private val bookListsRepository: BookListsRepository) : 
      * Opens or closes the create dialog
      * @param value value to determine whether dialog should be opened
      * */
-    fun openCreateDialog(value: Boolean) {
+    fun onOpenCreateDialog(value: Boolean) {
         bookListModalDBState = BookListCreateUpdateDBState.Start
         _bookListUiState.update { it.copy(openCreateDialog = value, createDialogText = "") }
     }

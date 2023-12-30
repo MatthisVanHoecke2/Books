@@ -8,7 +8,7 @@ import com.example.books.persistence.data.books.BookEntity
 class FakeBookListDao : BookListDao {
     override suspend fun insert(bookList: BookList): Long {
         val list = FakeDataSource.bookLists.toMutableList()
-        val id = FakeDataSource.bookLists.last().bookListId
+        val id = FakeDataSource.bookLists.lastOrNull()?.bookListId ?: 0
         list.add(bookList.copy(bookListId = id + 1))
         FakeDataSource.bookLists = list
         return id

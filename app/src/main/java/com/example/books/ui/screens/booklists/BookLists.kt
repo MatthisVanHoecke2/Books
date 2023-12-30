@@ -45,7 +45,7 @@ fun BookLists(onNavigate: (Long) -> Unit) {
 
     if (openDialog) {
         BookListModal(
-            onDismiss = { viewModel.openCreateDialog(false) },
+            onDismiss = { viewModel.onOpenCreateDialog(false) },
             onConfirm = { viewModel.createList(createDialogText) },
             onTextChange = { viewModel.onTextInput(it) },
             dialogText = createDialogText,
@@ -59,7 +59,7 @@ fun BookLists(onNavigate: (Long) -> Unit) {
         topBar = {
             Surface(shadowElevation = dimensionResource(R.dimen.padding_small), modifier = Modifier.fillMaxWidth()) {
                 Box(Modifier.padding(0.dp, dimensionResource(R.dimen.padding_small))) {
-                    Button(onClick = { viewModel.openCreateDialog(true) }) {
+                    Button(onClick = { viewModel.onOpenCreateDialog(true) }) {
                         Icon(Icons.Default.Add, contentDescription = "Create list icon")
                         Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
                         Text("Create list")
