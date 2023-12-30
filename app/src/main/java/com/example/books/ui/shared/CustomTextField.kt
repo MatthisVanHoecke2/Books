@@ -15,8 +15,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 
+/**
+ * Custom composable [OutlinedTextField]
+ * @param modifier value to adjust the default textfield
+ * @param value current textfield value
+ * @param onValueChange callback to change value
+ * @param onDone callback to perform when done
+ * @param label caption component shown above textfield
+ * @param supportingText component to be shown below textfield
+ * @param readOnly value to determine whether textfield is read only
+ * @param trailingIcon component shown after textfield
+ * @param leadingIcon component shown before textfield
+ * @param placeholder placeholder component
+ * @param onClear callback to clear textfield
+ * @param clearable value to determine whether textfield is clearable
+ * @param colors textfield colors
+ * @param outlined value to determine if textfield is of the Outlined or Default variant
+ * */
 @Composable
 fun CustomTextField(
+    modifier: Modifier = Modifier,
     value: String = "",
     onValueChange: (String) -> Unit,
     onDone: (() -> Unit)? = null,
@@ -29,7 +47,6 @@ fun CustomTextField(
     isError: Boolean = false,
     onClear: (() -> Unit)? = null,
     clearable: Boolean = true,
-    modifier: Modifier = Modifier,
     colors: TextFieldColors = TextFieldDefaults.colors(),
     outlined: Boolean = false,
 ) {

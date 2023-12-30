@@ -34,6 +34,10 @@ import com.example.books.ui.navigation.components.DrawerContent
 import com.example.books.ui.navigation.components.TopBar
 import kotlinx.coroutines.launch
 
+/**
+ * Main composable of the Books app
+ * @param navController the controller used for navigation
+ * */
 @Composable
 fun BooksApp(navController: NavHostController = rememberNavController()) {
     Navigation(navController = navController, padding = PaddingValues())

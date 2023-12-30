@@ -19,6 +19,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
+/**
+ * Custom dropdown component for selecting a [DropdownItem]
+ * @param list list of selectable values
+ * */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomOptionsDropDown(list: List<DropdownItem>) {
@@ -51,4 +55,9 @@ fun CustomOptionsDropDown(list: List<DropdownItem>) {
     }
 }
 
+/**
+ * Data class for creating a list of selectable items
+ * @property name the text displayed within an item
+ * @property callback the function executed on click
+ * */
 data class DropdownItem(val name: String, val callback: () -> Unit)

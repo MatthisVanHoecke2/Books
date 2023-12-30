@@ -10,6 +10,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import com.example.books.R
 
+/**
+ * Horizontally centered loading spinner
+ * */
 @Composable
 fun CenteredSpinner() {
     Row(

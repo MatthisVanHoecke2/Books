@@ -21,8 +21,12 @@ import com.example.books.R
 
 /**
  * Custom composable confirm dialog
+ * @param modifier value for adjusting the default [Dialog]
+ * @param icon icon to display above text
  * @param onDismiss callback for closing the dialog
  * @param onConfirm callback for confirming
+ * @param confirmButton button to execute the [onConfirm] callback
+ * @param dismissButton button to execute the [onDismiss] callback
  * @param title composable title
  * @param content composable content
  * */
