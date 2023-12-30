@@ -12,6 +12,13 @@ import androidx.compose.ui.res.dimensionResource
 import com.example.books.R
 import com.example.books.model.Book
 
+/**
+ * Screen to display when the list of [Book] has been retrieved successfully
+ * @param searchResult the result list of queried books
+ * @param expandSearch callback for expanding the current list of books
+ * @param onNavigate callback function for navigating to a book detail page
+ * @param endOfList value to determine if the end of the result list has been reached
+ * */
 fun LazyGridScope.successScreen(searchResult: List<Book>, expandSearch: () -> Unit, onNavigate: (String) -> Unit, endOfList: Boolean) {
     resultList(searchResult = searchResult, onNavigate = onNavigate)
     if (!endOfList) {

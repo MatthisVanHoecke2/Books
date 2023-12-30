@@ -1,7 +1,5 @@
 package com.example.books.ui.screens.booklists.components
 
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Divider
@@ -12,11 +10,20 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import com.example.books.persistence.data.booklists.BookList
-import com.example.books.ui.screens.booklists.model.BookListModalDBState
+import com.example.books.ui.screens.booklists.model.BookListCreateUpdateDBState
 import com.example.books.ui.shared.ConfirmDialog
 
+/**
+ * Screen to display when the list of [BookList] has been retrieved successfully
+ * @param bookLists list of [BookList]
+ * @param createDialogText create dialog textfield value
+ * @param onTextChange callback for changing the [createDialogText] value
+ * @param onDeleteList callback function for deleting a [BookList]
+ * @param onRenameList callback for renaming a book list
+ * @param dbModalState current repository state for the book list create operation
+ * @param onNavigate callback function for navigating to a book list detail page
+ * */
 @Composable
 fun SuccessScreen(
     bookLists: List<BookList>,
@@ -24,9 +31,8 @@ fun SuccessScreen(
     onTextChange: (String) -> Unit,
     onDeleteList: (BookList) -> Unit,
     onRenameList: (BookList) -> Unit,
-    dbModalState: BookListModalDBState,
+    dbModalState: BookListCreateUpdateDBState,
     onNavigate: (Long) -> Unit,
-    padding: PaddingValues,
 ) {
     var openRename by remember { mutableStateOf(false) }
     var openDeleteConfirm by remember { mutableStateOf(false) }
@@ -50,14 +56,14 @@ fun SuccessScreen(
                 openRename = false
             },
             onTextChange = onTextChange,
-            createDialogText = createDialogText,
+            dialogText = createDialogText,
             dbModalState = dbModalState,
             title = { Text("Rename list") },
             confirmText = "Rename",
         )
     }
 
-    LazyColumn(modifier = Modifier.padding(padding)) {
+    LazyColumn {
         itemsIndexed(bookLists) { index, book ->
             BookListItem(
                 bookList = book,

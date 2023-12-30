@@ -13,6 +13,12 @@ import androidx.compose.ui.unit.dp
 import com.example.books.persistence.data.booklists.BookList
 import com.example.books.ui.shared.ConfirmDialog
 
+/**
+ * Dialog for adding a book to a specific book list
+ * @param onDismiss callback function for closing the dialog
+ * @param bookLists list of [BookList] to choose from
+ * @param insertBookIntoList callback function for adding the current displayed book to a book list
+ * */
 @Composable
 fun ListDialog(onDismiss: () -> Unit, bookLists: List<BookList>, insertBookIntoList: (BookList) -> Unit) {
     ConfirmDialog(

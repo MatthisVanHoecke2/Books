@@ -12,6 +12,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import com.example.books.R
 
+/**
+ * The top bar of the application
+ * @param onIconClick callback function for clicking on the menu drawer icon
+ * @param title text to display in the top bar
+ * @param icon icon inside the menu drawer button
+ * */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(

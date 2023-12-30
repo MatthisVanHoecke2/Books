@@ -12,23 +12,33 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import com.example.books.R
-import com.example.books.ui.screens.booklists.model.BookListModalDBState
+import com.example.books.ui.screens.booklists.model.BookListCreateUpdateDBState
 import com.example.books.ui.shared.ConfirmDialog
 import com.example.books.ui.shared.CustomTextField
 
+/**
+ * Composable modal for creating or renaming a book list
+ * @param onDismiss callback for closing the modal
+ * @param onConfirm callback for confirming the creation or change
+ * @param onTextChange callback for editing the [dialogText]
+ * @param dialogText modal textfield value
+ * @param dbModalState the current state of an create or update operation
+ * @param title composable title of the modal
+ * @param confirmText the text inside the confirm button
+ * */
 @Composable
 fun BookListModal(
     onDismiss: () -> Unit,
     onConfirm: () -> Unit,
     onTextChange: (String) -> Unit,
-    createDialogText: String,
-    dbModalState: BookListModalDBState,
+    dialogText: String,
+    dbModalState: BookListCreateUpdateDBState,
     title: @Composable() () -> Unit,
     confirmText: String,
 ) {
     ConfirmDialog(
         icon = {
-            if (dbModalState is BookListModalDBState.Loading) {
+            if (dbModalState is BookListCreateUpdateDBState.Loading) {
                 Row(
                     horizontalArrangement = Arrangement.Center,
                     modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium)),
@@ -46,24 +56,24 @@ fun BookListModal(
         content = {
             Column {
                 CustomTextField(
-                    value = createDialogText,
+                    value = dialogText,
                     onValueChange = { onTextChange.invoke(it) },
                     onDone = { onConfirm.invoke() },
                     placeholder = { Text("List name") },
                     outlined = true,
                 )
-                if (dbModalState is BookListModalDBState.Error) {
+                if (dbModalState is BookListCreateUpdateDBState.Error) {
                     Text(dbModalState.message)
                 }
             }
         },
         confirmButton = {
-            Button(onClick = { onConfirm.invoke() }, enabled = dbModalState !is BookListModalDBState.Loading) {
+            Button(onClick = { onConfirm.invoke() }, enabled = dbModalState !is BookListCreateUpdateDBState.Loading) {
                 Text(confirmText)
             }
         },
         dismissButton = {
-            Button(onClick = { onDismiss.invoke() }, enabled = dbModalState !is BookListModalDBState.Loading) {
+            Button(onClick = { onDismiss.invoke() }, enabled = dbModalState !is BookListCreateUpdateDBState.Loading) {
                 Text("Cancel")
             }
         },

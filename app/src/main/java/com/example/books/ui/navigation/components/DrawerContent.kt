@@ -8,6 +8,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.example.books.ui.navigation.AppPage
 
+/**
+ * Composable content of the navigation drawer, containing DrawerItems
+ * @param onClick callback function for clicking on a [DrawerItem]
+ * */
 @Composable
 fun DrawerContent(onClick: (String) -> Unit) {
     val homeRoute = stringResource(AppPage.Home.route)

@@ -1,10 +1,12 @@
 package com.example.books.ui.screens.booklistdetails.components
 
-import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.runtime.Composable
 import com.example.books.ui.shared.CenteredSpinner
 
-fun LazyListScope.loadingScreen() {
-    item {
-        CenteredSpinner()
-    }
+/**
+ * Screen to display a loading spinner when the book list is being retrieved
+ * */
+@Composable
+fun LoadingScreen() {
+    CenteredSpinner()
 }

@@ -23,6 +23,11 @@ import com.example.books.ui.screens.booklistdetails.BookListDetailsScreen
 import com.example.books.ui.screens.booklists.BookLists
 import com.example.books.ui.screens.home.HomeScreen
 
+/**
+ * Composable for displaying different pages
+ * @param navController Navigation controller for handling page navigation
+ * @param padding page padding to display on every page
+ * */
 @Composable
 fun Navigation(navController: NavHostController, padding: PaddingValues) {
     val homeRoute = stringResource(AppPage.Home.route)

@@ -18,6 +18,12 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
 import com.example.books.R
 
+/**
+ * Composable drawer item, used for navigating to different pages
+ * @param icon icon to display in drawer item
+ * @param label label display name of the page to navigate to
+ * @param onClick callback function for navigating to a page when clicked
+ * */
 @Composable
 fun DrawerItem(
     icon: ImageVector? = null,

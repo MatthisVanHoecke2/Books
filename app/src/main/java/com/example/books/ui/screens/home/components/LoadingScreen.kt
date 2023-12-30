@@ -12,6 +12,11 @@ import androidx.compose.ui.res.dimensionResource
 import com.example.books.R
 import com.example.books.model.Book
 
+/**
+ * Screen to display a loading spinner when the book lists are being retrieved
+ * @param loadedList already loaded books, in case the request was made to expand the current list
+ * @param onNavigate callback for navigating to a book details page
+ * */
 fun LazyGridScope.loadingScreen(loadedList: List<Book>, onNavigate: (String) -> Unit) {
     resultList(searchResult = loadedList, onNavigate = onNavigate)
     item(span = { GridItemSpan(maxLineSpan) }) {

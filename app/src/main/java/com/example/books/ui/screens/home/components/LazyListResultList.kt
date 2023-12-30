@@ -19,6 +19,11 @@ import coil.compose.SubcomposeAsyncImage
 import com.example.books.R
 import com.example.books.model.Book
 
+/**
+ * Displays a list of the queried books
+ * @param searchResult a list of books
+ * @param onNavigate callback for navigating to a book details page
+ * */
 fun LazyGridScope.resultList(searchResult: List<Book>, onNavigate: (String) -> Unit) {
     items(
         searchResult,

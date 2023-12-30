@@ -24,6 +24,10 @@ import com.example.books.ui.screens.home.model.BookApiState
 import com.example.books.ui.screens.home.model.HomeViewModel
 import com.example.books.ui.shared.CustomTextField
 
+/**
+ * Composable screen for displaying the Home page
+ * @param onNavigate callback function for navigating to a BookDetails page
+ * */
 @Composable
 fun HomeScreen(onNavigate: (String) -> Unit) {
     val viewModel = viewModel<HomeViewModel>(factory = HomeViewModel.Factory)

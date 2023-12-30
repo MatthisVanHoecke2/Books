@@ -17,10 +17,30 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.IOException
 
+/**
+ * Interface for determining the current state of a book CRUD operation
+ * */
 sealed interface BookApiState {
+    /**
+     * Data object for when the operation is waiting to be executed
+     * */
     data object Start : BookApiState
+
+    /**
+     * Data object for when the operation was successfully executed
+     * @property books the books retrieved from the repository
+     * */
     data class Success(val books: List<Book>) : BookApiState
+
+    /**
+     * Data object for when the operation is loading
+     * */
     data object Loading : BookApiState
+
+    /**
+     * Data class for when the operation has failed
+     * @param message error message to display
+     * */
     data class Error(val message: String) : BookApiState
 }
 
@@ -35,7 +55,7 @@ class HomeViewModel(private val booksRepository: BookRepository) : ViewModel() {
     private val _homeUiState = MutableStateFlow(HomeUiState())
 
     /**
-     * UI state holding values
+     * Value holding the current [HomeUiState]
      * */
     val homeUiState = _homeUiState.asStateFlow()
 

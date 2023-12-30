@@ -48,4 +48,7 @@ interface BookListDao {
      * */
     @Query("SELECT b.* FROM book b JOIN booklistline bll ON b.book_key = bll.book_key JOIN booklist bl ON bll.booklist_id = bl.booklist_id WHERE bl.booklist_id = :id")
     suspend fun getAllBooksFromList(id: Long): List<BookEntity>
+
+    @Query("SELECT * FROM booklist WHERE booklist_id = :id")
+    suspend fun getBookListById(id: Long): BookList
 }

@@ -16,6 +16,14 @@ import com.example.books.persistence.data.booklists.BookList
 import com.example.books.ui.shared.CustomOptionsDropDown
 import com.example.books.ui.shared.DropdownItem
 
+/**
+ * Composable for displaying a single [BookList]
+ * @param bookList current [BookList] to display
+ * @param onTextChange callback for changing the create modal dialog textfield value
+ * @param onRenameList callback for renaming a book list
+ * @param onDeleteList callback for deleting a book list
+ * @param onNavigate callback for navigating to the book list details page
+ * */
 @Composable
 fun BookListItem(
     bookList: BookList,

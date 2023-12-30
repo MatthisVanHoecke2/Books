@@ -34,6 +34,15 @@ import com.example.books.ui.screens.bookdetails.model.BookInsertApiState
 import com.example.books.ui.shared.CustomAlertDialog
 import com.example.books.ui.shared.DetailComponent
 
+/**
+ * Screen to display when the [Book] data has been retrieved successfully
+ * @param book the currently selected [Book]
+ * @param ratings the selected [Book] ratings
+ * @param bookLists list of [BookList] to choose from, used to add the current [Book] to a specific list
+ * @param insertBookIntoList callback function for adding the current displayed [Book] to a [BookList]
+ * @param apiState the current state of the insert operation
+ * @param closeAlert callback function for closing the message dialog for displaying a success or error message
+ * */
 @Composable
 fun SuccessScreen(book: Book, ratings: Double, bookLists: List<BookList>, insertBookIntoList: (BookList) -> Unit, apiState: BookInsertApiState, closeAlert: () -> Unit) {
     var openDialog by remember { mutableStateOf(false) }

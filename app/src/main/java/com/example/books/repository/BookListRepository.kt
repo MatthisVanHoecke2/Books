@@ -46,7 +46,14 @@ interface BookListsRepository {
      * @param id primary key of the book list to retrieve
      * @return the list of books inside a book list
      * */
-    suspend fun getBookListById(id: Long): List<Book>
+    suspend fun getListOfBooksById(id: Long): List<Book>
+
+    /**
+     * Retrieves a single [BookList]
+     * @param id primary key of the book list to retrieve
+     * @return an instance of [BookList]
+     * */
+    suspend fun getBookListById(id: Long): BookList
 
     /**
      * Inserts a specific book into a book list
@@ -77,8 +84,12 @@ class NetworkBookListRepository(private val database: BooksDatabase) : BookLists
         database.bookListDao().update(bookList)
     }
 
-    override suspend fun getBookListById(id: Long): List<Book> {
+    override suspend fun getListOfBooksById(id: Long): List<Book> {
         return database.bookListDao().getAllBooksFromList(id)
+    }
+
+    override suspend fun getBookListById(id: Long): BookList {
+        return database.bookListDao().getBookListById(id)
     }
 
     override suspend fun insertIntoList(bookList: BookList, book: BookEntity) {

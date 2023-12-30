@@ -16,36 +16,78 @@ import com.example.books.persistence.data.books.BookEntity
 import com.example.books.repository.BookListsRepository
 import com.example.books.repository.BookRepository
 import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.IOException
 
+/**
+ * Interface for determining the current state of a book GET operation
+ * */
 sealed interface BookGetApiState {
+    /**
+     * Data class for when the operation was successful
+     * @param book the [Book] that was retrieved from the [BookRepository]
+     * @param rating the rating of the [Book] that was retrieved from the [BookRepository]
+     * @param bookLists the list of [BookList] that was retrieved from the [BookListsRepository]
+     * */
     data class Success(val book: Book, val rating: Double, val bookLists: List<BookList>) : BookGetApiState
+
+    /**
+     * Data object for when the operation is loading
+     * */
     data object Loading : BookGetApiState
+
+    /**
+     * Data class for when the operation has failed
+     * @param message error message to display
+     * */
     data class Error(val message: String) : BookGetApiState
 }
 
+/**
+ * Interface for determining the current state of a book INSERT operation
+ * */
 sealed interface BookInsertApiState {
+
+    /**
+     * Data object for when the operation is waiting to be executed
+     * */
     data object Start : BookInsertApiState
+
+    /**
+     * Data class for when the operation was successful
+     * @param message success message to display
+     * */
     data class Success(val message: String) : BookInsertApiState
+
+    /**
+     * Data class for when the operation has failed
+     * @param message error message to display
+     * */
     data class Error(val message: String) : BookInsertApiState
 }
 
 /**
  * ViewModel class for BookDetails page
- *
+ * @property booksRepository [BookRepository] instance for handling book CRUD operations
+ * @property bookListsRepository [BookListsRepository] instance for handling book list CRUD operations
  * @property key the key value to retrieve the book details from the API
  * */
-class BookDetailsVM(private val booksRepository: BookRepository, private val bookListsRepository: BookListsRepository, private val key: String) : ViewModel() {
+class BookDetailsViewModel(private val booksRepository: BookRepository, private val bookListsRepository: BookListsRepository, private val key: String) : ViewModel() {
+    /**
+     * Variable for holding the current [BookGetApiState]
+     * */
     var bookGetApiState: BookGetApiState by mutableStateOf(BookGetApiState.Loading)
         private set
+
+    /**
+     * Variable for holding the current [BookInsertApiState]
+     * */
     var bookInsertApiState: BookInsertApiState by mutableStateOf(BookInsertApiState.Start)
         private set
 
-    private val _bookDetailsApiState = MutableStateFlow(BookDetailsUiState())
-
+    /**
+     * Function to be executed on initialization, loads all the necessary data into the ViewModel
+     * */
     init {
         viewModelScope.launch {
             bookGetApiState = try {
@@ -55,7 +97,6 @@ class BookDetailsVM(private val booksRepository: BookRepository, private val boo
                 val book = bookRequest.await()
                 val ratings = ratingsRequest.await()
                 val bookLists = bookListsRequest.await()
-                _bookDetailsApiState.update { it.copy(bookLists = bookLists) }
                 BookGetApiState.Success(book, ratings, bookLists)
             } catch (ex: Exception) {
                 BookGetApiState.Error("An error occurred while fetching the book details")
@@ -63,6 +104,12 @@ class BookDetailsVM(private val booksRepository: BookRepository, private val boo
         }
     }
 
+    /**
+     * Inserts a [BookEntity] into a [BookList]
+     * @param bookList list to insert book into
+     * @param book [Book] to be inserted
+     * @param rating rating of the to be inserted [Book]
+     * */
     fun insertIntoList(bookList: BookList, book: Book, rating: Double) {
         val bookEntity: BookEntity = if (book is BookDetail) {
             BookEntity(
@@ -87,11 +134,18 @@ class BookDetailsVM(private val booksRepository: BookRepository, private val boo
         }
     }
 
+    /**
+     * Closes the message dialog
+     * */
     fun closeAlertDialog() {
         bookInsertApiState = BookInsertApiState.Start
     }
 
     companion object {
+        /**
+         * Custom ViewModel factory to pass variables to the [BookDetailsViewModel]
+         * @param key selected [Book] key
+         * */
         class Factory(private val key: String) : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
                 val application = (extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as BooksApplication)

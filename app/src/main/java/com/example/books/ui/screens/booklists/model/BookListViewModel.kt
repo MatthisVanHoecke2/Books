@@ -18,84 +18,155 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.IOException
 
-sealed interface BookListDBState {
-    data object Loading : BookListDBState
-    data object Success : BookListDBState
-    data object Error : BookListDBState
+/**
+ * Interface for determining the current state of a book list GET operation
+ * */
+sealed interface BookListGetDBState {
+    /**
+     * Data object for when the operation is loading
+     * */
+    data object Loading : BookListGetDBState
+
+    /**
+     * Data object for when the operation was successfully executed
+     * */
+    data object Success : BookListGetDBState
+
+    /**
+     * Data class for when the operation has failed
+     * @param message error message to display
+     * */
+    data class Error(val message: String) : BookListGetDBState
 }
 
-sealed interface BookListModalDBState {
-    data object Start : BookListModalDBState
-    data object Loading : BookListModalDBState
-    data object Success : BookListModalDBState
-    data class Error(val message: String) : BookListModalDBState
+/**
+ * Interface for determining the current state of a book list CREATE or UPDATE operation
+ * */
+sealed interface BookListCreateUpdateDBState {
+    /**
+     * Data object for when the operation is waiting to be executed
+     * */
+    data object Start : BookListCreateUpdateDBState
+
+    /**
+     * Data object for when the operation is loading
+     * */
+    data object Loading : BookListCreateUpdateDBState
+
+    /**
+     * Data object for when the operation was successfully executed
+     * */
+    data object Success : BookListCreateUpdateDBState
+
+    /**
+     * Data class for when the operation has failed
+     * @param message error message to display
+     * */
+    data class Error(val message: String) : BookListCreateUpdateDBState
 }
 
+/**
+ * ViewModel class for BookList page
+ * @property bookListsRepository [BookListsRepository] instance for handling book list CRUD operations
+ * */
 class BookListViewModel(private val bookListsRepository: BookListsRepository) : ViewModel() {
-    var bookListDBState: BookListDBState by mutableStateOf(BookListDBState.Loading)
+    /**
+     * Variable for holding the current [BookListGetDBState]
+     * */
+    var bookListDBState: BookListGetDBState by mutableStateOf(BookListGetDBState.Loading)
         private set
 
-    var bookListModalDBState: BookListModalDBState by mutableStateOf(BookListModalDBState.Start)
+    /**
+     * Value for holding the current [BookListCreateUpdateDBState]
+     * */
+    var bookListModalDBState: BookListCreateUpdateDBState by mutableStateOf(BookListCreateUpdateDBState.Start)
         private set
 
     private val _bookListUiState = MutableStateFlow(BookListUiState())
+
+    /**
+     * Value for holding the current [BookListUiState]
+     * */
     val bookListUiState = _bookListUiState.asStateFlow()
 
+    /**
+     * Function to be executed on initialization, loads all the necessary data into the ViewModel
+     * */
     init {
         viewModelScope.launch {
             bookListDBState = try {
                 val lists = bookListsRepository.getLists()
                 _bookListUiState.update { it.copy(bookLists = lists) }
-                BookListDBState.Success
+                BookListGetDBState.Success
             } catch (ex: IOException) {
-                BookListDBState.Error
+                BookListGetDBState.Error("An error occurred while fetching the book lists")
             }
         }
     }
 
+    /**
+     * Changes the create dialog textfield value
+     * @param value new value to update the textfield value with
+     * */
     fun onTextInput(value: String) {
         _bookListUiState.update { it.copy(createDialogText = value) }
     }
 
+    /**
+     * Opens or closes the create dialog
+     * @param value value to determine whether dialog should be opened
+     * */
     fun openCreateDialog(value: Boolean) {
-        bookListModalDBState = BookListModalDBState.Start
+        bookListModalDBState = BookListCreateUpdateDBState.Start
         _bookListUiState.update { it.copy(openCreateDialog = value, createDialogText = "") }
     }
 
+    /**
+     * Creates a new [BookList]
+     * @param listName name of the new list
+     * */
     fun createList(listName: String) {
-        bookListModalDBState = BookListModalDBState.Loading
+        bookListModalDBState = BookListCreateUpdateDBState.Loading
         viewModelScope.launch {
             bookListModalDBState = try {
                 val id: Long = bookListsRepository.createList(listName)
                 val bookLists = bookListUiState.value.bookLists.toMutableList()
                 bookLists.add(BookList(id, listName))
                 _bookListUiState.update { it.copy(openCreateDialog = false, bookLists = bookLists, createDialogText = "") }
-                BookListModalDBState.Success
+                BookListCreateUpdateDBState.Success
             } catch (ex: IOException) {
-                BookListModalDBState.Error("An error occurred while creating a new book list")
+                BookListCreateUpdateDBState.Error("An error occurred while creating a new book list")
             } catch (ex: SQLiteConstraintException) {
-                BookListModalDBState.Error("The list '$listName' already exists")
+                BookListCreateUpdateDBState.Error("The list '$listName' already exists")
             }
         }
     }
 
+    /**
+     * Deletes a specific [BookList]
+     * @param bookList list to delete
+     * */
     fun deleteList(bookList: BookList) {
-        bookListModalDBState = BookListModalDBState.Loading
+        bookListModalDBState = BookListCreateUpdateDBState.Loading
         viewModelScope.launch {
             bookListModalDBState = try {
                 bookListsRepository.deleteList(bookList)
                 val bookLists = bookListUiState.value.bookLists.toMutableList()
                 bookLists.remove(bookList)
                 _bookListUiState.update { it.copy(openCreateDialog = false, bookLists = bookLists) }
-                BookListModalDBState.Success
+                BookListCreateUpdateDBState.Success
             } catch (ex: Exception) {
-                BookListModalDBState.Error("An error occurred while trying to delete '$bookList'")
+                BookListCreateUpdateDBState.Error("An error occurred while trying to delete '$bookList'")
             }
         }
     }
 
+    /**
+     * Updates a specific [BookList]
+     * @param bookList updated list
+     * */
     fun updateList(bookList: BookList) {
-        bookListModalDBState = BookListModalDBState.Loading
+        bookListModalDBState = BookListCreateUpdateDBState.Loading
 
         viewModelScope.launch {
             bookListModalDBState = try {
@@ -104,16 +175,16 @@ class BookListViewModel(private val bookListsRepository: BookListsRepository) : 
                 bookLists.removeIf { it.bookListId == bookList.bookListId }
                 bookLists.add(bookList)
                 _bookListUiState.update { it.copy(openCreateDialog = false, bookLists = bookLists) }
-                BookListModalDBState.Success
+                BookListCreateUpdateDBState.Success
             } catch (ex: Exception) {
-                BookListModalDBState.Error("An error occurred while trying to update '$bookList'")
+                BookListCreateUpdateDBState.Error("An error occurred while trying to update '$bookList'")
             }
         }
     }
 
     companion object {
         /**
-         * Factory object for creating HomeViewModel instance
+         * Factory object for creating BookListViewModel instance
          * */
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
