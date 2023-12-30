@@ -46,6 +46,6 @@ fun BookDetail.asEntityObject(rating: Double): BookEntity {
         key = this.key.replace("/works/", ""),
         title = this.title,
         rating = rating,
-        coverId = this.covers.first(),
+        coverId = this.covers.firstOrNull(),
     )
 }

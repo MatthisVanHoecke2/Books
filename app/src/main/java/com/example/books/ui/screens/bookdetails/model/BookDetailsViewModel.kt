@@ -116,7 +116,7 @@ class BookDetailsViewModel(private val booksRepository: BookRepository, private 
                 key = book.key.replace("/works/", ""),
                 title = book.title,
                 rating = rating,
-                coverId = book.covers.first(),
+                coverId = book.covers.firstOrNull(),
             )
         } else {
             book as BookEntity

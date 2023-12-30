@@ -39,23 +39,23 @@ interface BookRepository {
  * @property database database connection for when API is unavailable
  * @property checkConnection function callback for checking whether there is a connection with the internet
  * */
-class NetworkBookRepository(private val booksApiService: BooksApiService, private val database: BooksDatabase? = null, private val checkConnection: () -> Boolean) : BookRepository {
+class NetworkBookRepository(private val booksApiService: BooksApiService, private val database: BooksDatabase, private val checkConnection: () -> Boolean) : BookRepository {
 
     override suspend fun getBooks(query: String, offset: Long, limit: Long): List<Book> {
-        if (!checkConnection.invoke()) return database!!.bookDao().getAll(query, offset, limit)
+        if (!checkConnection.invoke()) return database.bookDao().getAll(query, offset, limit)
         return booksApiService.getBooks(query, offset, limit).docs.map { it.copy(key = it.key.replace("/works/", "")) }
     }
 
     override suspend fun getBook(key: String): Book {
-        if (!checkConnection.invoke()) return database!!.bookDao().getSingle(key)
+        if (!checkConnection.invoke()) return database.bookDao().getSingle(key)
         val ratings = getRatings(key)
         val book = booksApiService.getBook(key)
-        database!!.bookDao().update(book.asEntityObject(ratings))
+        database.bookDao().update(book.asEntityObject(ratings))
         return book
     }
 
     override suspend fun getRatings(key: String): Double {
-        if (!checkConnection.invoke()) return database!!.bookDao().getRating(key)
+        if (!checkConnection.invoke()) return database.bookDao().getRating(key)
         return booksApiService.getRatings(key).summary.average ?: 0.0
     }
 }
