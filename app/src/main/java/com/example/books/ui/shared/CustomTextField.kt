@@ -13,6 +13,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import com.example.books.R
@@ -51,8 +52,8 @@ fun CustomTextField(
     clearable: Boolean = true,
     colors: TextFieldColors = TextFieldDefaults.colors(),
     outlined: Boolean = false,
+    focusManager: FocusManager = LocalFocusManager.current,
 ) {
-    val focusManager = LocalFocusManager.current
     val actions = KeyboardActions(onDone = {
         onDone?.invoke()
         focusManager.clearFocus()

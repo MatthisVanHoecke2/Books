@@ -13,6 +13,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -36,6 +37,7 @@ fun HomeScreen(onNavigate: (String) -> Unit) {
     val search = homeUiState.search
     val searchResult = homeUiState.searchResult
     val apiState = viewModel.bookApiState
+    val focusManager = LocalFocusManager.current
 
     Column {
         LazyVerticalGrid(
@@ -52,10 +54,14 @@ fun HomeScreen(onNavigate: (String) -> Unit) {
                         onDone = { viewModel.searchApi() },
                         onClear = { viewModel.onSearch("") },
                         modifier = Modifier.weight(1f),
+                        focusManager = focusManager,
                     )
                     Button(
                         enabled = apiState is BookApiState.Success || apiState is BookApiState.Start,
-                        onClick = { viewModel.searchApi() },
+                        onClick = {
+                            viewModel.searchApi()
+                            focusManager.clearFocus()
+                        },
                     ) {
                         Text(text = stringResource(R.string.home_button_search))
                     }

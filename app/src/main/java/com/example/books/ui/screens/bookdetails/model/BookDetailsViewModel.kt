@@ -98,7 +98,7 @@ class BookDetailsViewModel(private val booksRepository: BookRepository, private 
                 val ratings = ratingsRequest.await()
                 val bookLists = bookListsRequest.await()
                 BookGetApiState.Success(book, ratings, bookLists)
-            } catch (ex: Exception) {
+            } catch (ex: IOException) {
                 BookGetApiState.Error("An error occurred while fetching the book details")
             }
         }

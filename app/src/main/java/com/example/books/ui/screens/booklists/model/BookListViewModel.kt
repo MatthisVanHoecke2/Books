@@ -164,7 +164,7 @@ class BookListViewModel(private val bookListsRepository: BookListsRepository) : 
                 bookLists.remove(bookList)
                 _bookListUiState.update { it.copy(openCreateDialog = false, bookLists = bookLists) }
                 BookListCreateUpdateDBState.Success
-            } catch (ex: Exception) {
+            } catch (ex: IOException) {
                 BookListCreateUpdateDBState.Error("An error occurred while trying to delete '$bookList'")
             }
         }
@@ -180,12 +180,16 @@ class BookListViewModel(private val bookListsRepository: BookListsRepository) : 
         viewModelScope.launch {
             bookListModalDBState = try {
                 bookListsRepository.updateList(bookList)
-                val bookLists = bookListUiState.value.bookLists.toMutableList()
-                bookLists.removeIf { it.bookListId == bookList.bookListId }
-                bookLists.add(bookList)
+                val bookLists = bookListUiState.value.bookLists.map {
+                    if (it.bookListId == bookList.bookListId) {
+                        bookList
+                    } else {
+                        it
+                    }
+                }
                 _bookListUiState.update { it.copy(openCreateDialog = false, bookLists = bookLists) }
                 BookListCreateUpdateDBState.Success
-            } catch (ex: Exception) {
+            } catch (ex: IOException) {
                 BookListCreateUpdateDBState.Error("An error occurred while trying to update '$bookList'")
             }
         }
