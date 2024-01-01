@@ -7,7 +7,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.books.R
 import com.example.books.model.Book
 import com.example.books.ui.screens.booklistdetails.components.ErrorScreen
 import com.example.books.ui.screens.booklistdetails.components.LoadingScreen
@@ -35,7 +37,7 @@ fun BookListDetailsScreen(id: Long, onNavigate: (String) -> Unit) {
                 openConfirmDelete = false
                 viewModel.deleteBook(bookToDelete!!.key)
             },
-            title = { Text("Confirm", style = MaterialTheme.typography.titleLarge) },
+            title = { Text(stringResource(R.string.confirmdialog_confirm_title), style = MaterialTheme.typography.titleLarge) },
         ) {
             Text("Are you sure you want to delete book '${bookToDelete!!.title}'?")
         }

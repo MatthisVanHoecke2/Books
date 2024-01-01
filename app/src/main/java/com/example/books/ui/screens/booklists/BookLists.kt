@@ -18,6 +18,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.books.R
@@ -42,16 +43,22 @@ fun BookLists(onNavigate: (Long) -> Unit) {
     val createDialogText = bookListUiState.createDialogText
     val dbState = viewModel.bookListDBState
     val dbModalState = viewModel.bookListModalDBState
+    val isValidListName = viewModel.validateName(createDialogText)
 
     if (openDialog) {
         BookListModal(
             onDismiss = { viewModel.onOpenCreateDialog(false) },
-            onConfirm = { viewModel.createList(createDialogText) },
+            onConfirm = {
+                if (isValidListName) {
+                    viewModel.createList(createDialogText)
+                }
+            },
             onTextChange = { viewModel.onTextInput(it) },
             dialogText = createDialogText,
             dbModalState = dbModalState,
-            title = { Text("Create list") },
-            confirmText = "Create",
+            title = { Text(stringResource(R.string.booklist_createmodal_confirm_title)) },
+            confirmText = stringResource(R.string.booklist_createmodal_button_create),
+            isError = !isValidListName,
         )
     }
 
@@ -60,9 +67,9 @@ fun BookLists(onNavigate: (Long) -> Unit) {
             Surface(shadowElevation = dimensionResource(R.dimen.padding_small), modifier = Modifier.fillMaxWidth()) {
                 Box(Modifier.padding(0.dp, dimensionResource(R.dimen.padding_small))) {
                     Button(onClick = { viewModel.onOpenCreateDialog(true) }) {
-                        Icon(Icons.Default.Add, contentDescription = "Create list icon")
+                        Icon(Icons.Default.Add, contentDescription = stringResource(R.string.booklist_createlist_icon))
                         Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
-                        Text("Create list")
+                        Text(stringResource(R.string.booklist_button_createlist))
                     }
                 }
             }
@@ -78,6 +85,7 @@ fun BookLists(onNavigate: (Long) -> Unit) {
                     onRenameList = { viewModel.updateList(BookList(it.bookListId, createDialogText)) },
                     dbModalState = dbModalState,
                     onNavigate = onNavigate,
+                    isValidListName = isValidListName,
                 )
                 is BookListGetDBState.Loading -> LoadingScreen()
                 is BookListGetDBState.Error -> ErrorScreen(dbState.message)

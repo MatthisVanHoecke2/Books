@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import coil.compose.SubcomposeAsyncImage
 import com.example.books.R
@@ -41,7 +42,7 @@ fun SuccessScreen(bookList: BookList, bookListItems: List<Book>, onNavigate: (St
         topBar = {
             Surface(shadowElevation = dimensionResource(R.dimen.padding_small), modifier = Modifier.fillMaxWidth()) {
                 Box(Modifier.padding(dimensionResource(R.dimen.padding_small))) {
-                    DetailComponent(caption = "List name") {
+                    DetailComponent(caption = stringResource(R.string.booklistdetails_caption_listname)) {
                         Text(bookList.listName, style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold))
                     }
                 }
@@ -78,7 +79,7 @@ fun SuccessScreen(bookList: BookList, bookListItems: List<Book>, onNavigate: (St
                                     contentColor = MaterialTheme.colorScheme.error,
                                 ),
                             ) {
-                                Icon(Icons.Default.Remove, contentDescription = "Delete item")
+                                Icon(Icons.Default.Remove, contentDescription = stringResource(R.string.booklistdetails_delete_icon))
                             }
                         },
                         headlineContent = { Text(book.title) },

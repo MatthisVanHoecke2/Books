@@ -143,6 +143,15 @@ class BookListViewModel(private val bookListsRepository: BookListsRepository) : 
     }
 
     /**
+     * Validates the entered list name
+     * @param name new list name
+     * @return true if name is valid
+     * */
+    fun validateName(name: String): Boolean {
+        return !(name.isEmpty() || name.isBlank())
+    }
+
+    /**
      * Deletes a specific [BookList]
      * @param bookList list to delete
      * */

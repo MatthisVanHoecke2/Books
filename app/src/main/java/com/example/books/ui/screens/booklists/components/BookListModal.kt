@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import com.example.books.R
 import com.example.books.ui.screens.booklists.model.BookListCreateUpdateDBState
 import com.example.books.ui.shared.ConfirmDialog
@@ -35,6 +36,7 @@ fun BookListModal(
     dbModalState: BookListCreateUpdateDBState,
     title: @Composable() () -> Unit,
     confirmText: String,
+    isError: Boolean
 ) {
     ConfirmDialog(
         icon = {
@@ -59,8 +61,10 @@ fun BookListModal(
                     value = dialogText,
                     onValueChange = { onTextChange.invoke(it) },
                     onDone = { onConfirm.invoke() },
-                    placeholder = { Text("List name") },
+                    onClear = { onTextChange.invoke("") },
+                    placeholder = { Text(stringResource(R.string.booklistdetails_caption_listname)) },
                     outlined = true,
+                    isError = isError,
                 )
                 if (dbModalState is BookListCreateUpdateDBState.Error) {
                     Text(dbModalState.message)
@@ -74,7 +78,7 @@ fun BookListModal(
         },
         dismissButton = {
             Button(onClick = { onDismiss.invoke() }, enabled = dbModalState !is BookListCreateUpdateDBState.Loading) {
-                Text("Cancel")
+                Text(stringResource(R.string.confirmdialog_button_cancel))
             }
         },
     )

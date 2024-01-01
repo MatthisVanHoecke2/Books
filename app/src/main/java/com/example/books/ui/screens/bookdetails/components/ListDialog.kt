@@ -9,7 +9,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.books.R
 import com.example.books.persistence.data.booklists.BookList
 import com.example.books.ui.shared.ConfirmDialog
 
@@ -25,7 +27,7 @@ fun ListDialog(onDismiss: () -> Unit, bookLists: List<BookList>, insertBookIntoL
         icon = { },
         onDismiss = { onDismiss.invoke() },
         onConfirm = { onDismiss.invoke() },
-        title = { Text("Choose list", style = MaterialTheme.typography.titleLarge) },
+        title = { Text(stringResource(R.string.bookdetails_addtolist_dialog_title), style = MaterialTheme.typography.titleLarge) },
         dismissButton = { },
         confirmButton = { },
         modifier = Modifier.heightIn(0.dp, 200.dp),

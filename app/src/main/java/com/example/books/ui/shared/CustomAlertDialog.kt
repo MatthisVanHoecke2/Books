@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.window.Dialog
 import com.example.books.R
 
@@ -44,7 +45,7 @@ fun CustomAlertDialog(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_large)),
             ) {
-                Icon(Icons.Default.Info, "dialog icon")
+                Icon(Icons.Default.Info, stringResource(R.string.dialog_icon))
                 title.invoke()
                 text.invoke()
                 Row(
@@ -53,7 +54,7 @@ fun CustomAlertDialog(
                 ) {
                     Box {
                         Button(onClick = { onOk.invoke() }) {
-                            Text("Ok")
+                            Text(stringResource(R.string.alertdialog_button_ok))
                         }
                     }
                 }

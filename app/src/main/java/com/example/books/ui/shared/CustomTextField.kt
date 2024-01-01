@@ -14,6 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
+import com.example.books.R
 
 /**
  * Custom composable [OutlinedTextField]
@@ -69,7 +71,7 @@ fun CustomTextField(
                         IconButton(onClick = {
                             onClear?.invoke()
                         }) {
-                            Icon(Icons.Default.Clear, contentDescription = "clear icon")
+                            Icon(Icons.Default.Clear, contentDescription = stringResource(R.string.textfield_clear_icon))
                         }
                     }
                     trailingIcon?.invoke()
@@ -96,7 +98,7 @@ fun CustomTextField(
                         IconButton(onClick = {
                             onClear?.invoke()
                         }) {
-                            Icon(Icons.Default.Clear, contentDescription = "clear icon")
+                            Icon(Icons.Default.Clear, contentDescription = stringResource(R.string.textfield_clear_icon))
                         }
                     }
                     trailingIcon?.invoke()

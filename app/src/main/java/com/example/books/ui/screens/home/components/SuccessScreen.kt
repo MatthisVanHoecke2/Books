@@ -9,6 +9,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import com.example.books.R
 import com.example.books.model.Book
 
@@ -24,7 +25,7 @@ fun LazyGridScope.successScreen(searchResult: List<Book>, expandSearch: () -> Un
     if (!endOfList) {
         item(span = { GridItemSpan(maxLineSpan) }) {
             if (searchResult.isEmpty()) {
-                Text("No books found")
+                Text(stringResource(R.string.home_error_nobooks))
             } else {
                 Row(
                     horizontalArrangement = Arrangement.Center,
@@ -33,7 +34,7 @@ fun LazyGridScope.successScreen(searchResult: List<Book>, expandSearch: () -> Un
                     Button(onClick = {
                         expandSearch.invoke()
                     }) {
-                        Text("Load more")
+                        Text(stringResource(R.string.home_button_loadmore))
                     }
                 }
             }

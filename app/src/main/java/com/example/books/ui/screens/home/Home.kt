@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.books.R
@@ -56,7 +57,7 @@ fun HomeScreen(onNavigate: (String) -> Unit) {
                         enabled = apiState is BookApiState.Success || apiState is BookApiState.Start,
                         onClick = { viewModel.searchApi() },
                     ) {
-                        Text(text = "Search")
+                        Text(text = stringResource(R.string.home_button_search))
                     }
                 }
             }

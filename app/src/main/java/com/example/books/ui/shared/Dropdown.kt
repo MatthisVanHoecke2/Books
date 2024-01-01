@@ -17,7 +17,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.books.R
 
 /**
  * Custom dropdown component for selecting a [DropdownItem]
@@ -36,7 +38,7 @@ fun CustomOptionsDropDown(list: List<DropdownItem>) {
             onClick = { expanded = true },
             modifier = Modifier.menuAnchor(),
         ) {
-            Icon(Icons.Default.MoreVert, contentDescription = "Delete list")
+            Icon(Icons.Default.MoreVert, contentDescription = stringResource(R.string.delete_icon))
         }
         ExposedDropdownMenu(
             expanded = expanded,

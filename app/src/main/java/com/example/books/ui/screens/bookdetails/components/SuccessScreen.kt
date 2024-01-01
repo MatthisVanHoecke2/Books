@@ -25,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import coil.compose.SubcomposeAsyncImage
 import com.example.books.R
 import com.example.books.model.Book
@@ -51,14 +52,14 @@ fun SuccessScreen(book: Book, ratings: Double, bookLists: List<BookList>, insert
         is BookInsertApiState.Start -> {}
         is BookInsertApiState.Success -> {
             CustomAlertDialog(
-                title = { Text("Success", style = MaterialTheme.typography.titleLarge) },
+                title = { Text(stringResource(R.string.bookdetails_addtolist_success_title), style = MaterialTheme.typography.titleLarge) },
                 text = { Text(apiState.message) },
                 onOk = { closeAlert.invoke() },
             )
         }
         is BookInsertApiState.Error -> {
             CustomAlertDialog(
-                title = { Text("Error", style = MaterialTheme.typography.titleLarge) },
+                title = { Text(stringResource(R.string.bookdetails_addtolist_error_title), style = MaterialTheme.typography.titleLarge) },
                 text = { Text(apiState.message) },
                 onOk = { closeAlert.invoke() },
             )
@@ -74,8 +75,8 @@ fun SuccessScreen(book: Book, ratings: Double, bookLists: List<BookList>, insert
             rememberScrollState(),
         ),
     ) {
-        DetailComponent(caption = "Title", content = { Text(book.title) })
-        DetailComponent(caption = "Ratings", content = { Text("${String.format("%.1f", ratings)}/5") })
+        DetailComponent(caption = stringResource(R.string.bookdetails_caption_title), content = { Text(book.title) })
+        DetailComponent(caption = stringResource(R.string.bookdetails_caption_ratings), content = { Text("${String.format("%.1f", ratings)}/5") })
         if (book.coverId != null || (book is BookDetail && book.covers.isNotEmpty())) {
             val cover = if (book.coverId != null) book.coverId else (book as BookDetail).covers.first()
             val imageUrl = "https://covers.openlibrary.org/b/id/$cover-L.jpg"
@@ -94,9 +95,9 @@ fun SuccessScreen(book: Book, ratings: Double, bookLists: List<BookList>, insert
             }
         }
         Button(onClick = { openDialog = true }) {
-            Icon(Icons.Default.Add, contentDescription = "Add icon")
+            Icon(Icons.Default.Add, contentDescription = stringResource(R.string.bookdetails_add_icon))
             Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
-            Text("Add to list")
+            Text(stringResource(R.string.bookdetails_add_buttontext))
         }
     }
 }

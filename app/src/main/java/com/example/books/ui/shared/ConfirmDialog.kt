@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.window.Dialog
 import com.example.books.R
 
@@ -33,17 +34,17 @@ import com.example.books.R
 @Composable
 fun ConfirmDialog(
     modifier: Modifier = Modifier,
-    icon: @Composable() () -> Unit = { Icon(Icons.Default.Info, contentDescription = "info icon") },
+    icon: @Composable() () -> Unit = { Icon(Icons.Default.Info, contentDescription = stringResource(R.string.dialog_icon)) },
     onDismiss: () -> Unit,
     onConfirm: () -> Unit,
     confirmButton: @Composable() () -> Unit = {
         Button(onClick = { onConfirm.invoke() }) {
-            Text("Confirm")
+            Text(stringResource(R.string.confirmdialog_button_confirm))
         }
     },
     dismissButton: @Composable() () -> Unit = {
         Button(onClick = { onDismiss.invoke() }) {
-            Text("Cancel")
+            Text(stringResource(R.string.confirmdialog_button_cancel))
         }
     },
     title: @Composable() () -> Unit,

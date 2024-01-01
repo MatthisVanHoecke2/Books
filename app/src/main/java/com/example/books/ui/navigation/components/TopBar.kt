@@ -1,5 +1,7 @@
 package com.example.books.ui.navigation.components
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -8,9 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import com.example.books.R
 
@@ -27,11 +27,12 @@ fun TopBar(
     title: String = stringResource(R.string.app_name),
     icon: ImageVector,
 ) {
+    val iconDescription = if (icon == Icons.Default.ArrowBack) stringResource(R.string.back_button) else stringResource(R.string.menu_button)
     TopAppBar(
         title = { Text(text = title) },
         navigationIcon = {
-            IconButton(onClick = { onIconClick.invoke() }, modifier = Modifier.testTag("menuButton")) {
-                Icon(icon, contentDescription = "toggle drawer")
+            IconButton(onClick = { onIconClick.invoke() }) {
+                Icon(icon, contentDescription = iconDescription)
             }
         },
         colors = TopAppBarDefaults.mediumTopAppBarColors(

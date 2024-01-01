@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.books.R
 import com.example.books.persistence.data.booklists.BookList
@@ -38,11 +39,11 @@ fun BookListItem(
         trailingContent = {
             CustomOptionsDropDown(
                 list = listOf(
-                    DropdownItem("Rename", callback = {
+                    DropdownItem(stringResource(R.string.dropdown_item_rename), callback = {
                         onTextChange.invoke(bookList.listName)
                         onRenameList.invoke(bookList)
                     }),
-                    DropdownItem("Delete", callback = { onDeleteList.invoke(bookList) }),
+                    DropdownItem(stringResource(R.string.dropdown_item_delete), callback = { onDeleteList.invoke(bookList) }),
                 ),
             )
         },
